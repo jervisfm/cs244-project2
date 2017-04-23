@@ -159,10 +159,46 @@
 % \end{algorithm}
 
 
-\section*{Problem 1}
+\section*{Exercise A}
+\emph{
+  Vary the fixed window size by editing controller.cc to see what happens.
+  Make a 2D graph of throughput vs. 95-percentile signal delay (similar to what
+  is seen on the contest analysis URLs) as you vary this value. What is the
+  best single window size that you can find to maximize the overall "score"
+  (log throughput/delay)? How repeatable are the measurements taken with the
+  same window size over multiple runs?
+}
 
-\end{enumerate}
-\vfill
+% \vfill
+% \pagebreak
+
+\section*{Exercise B}
+\emph{
+ Implement a simple AIMD scheme, similar to TCP's congestion-avoidance phase.
+ How well does this work? What constants did you choose?
+}
+
+\section*{Exercise C}
+\emph{
+  Implement a simple delay-triggered scheme, where the window rises or falls
+  based on whether the round-trip-time crosses some threshold value. Experiment
+  with a few thresholds or tweaks and report on what worked the best.
+}
+
+\section*{Exercise D}
+\emph{
+  Try different approaches and work to maximize your score on the final
+  evaluation. Be wary about "overtraining": after the contest is over, we
+  will collect new network traces and then run everybody's entries over the
+  newly-collected evaluation trace. In your report, please explain your
+  approach, including the important decisions you had to make and how you made
+  them. Include illustrative plots.
+}
+\section*{Exercise E}
+\emph{
+  Pick a cool name for your scheme!
+}
+
 
 % =============================================================================
 \end{document}
