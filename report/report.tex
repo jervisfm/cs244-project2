@@ -120,6 +120,8 @@
 \newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
    \noindent \textbf{Example~\thelecnum.\theexample. #1} \rmfamily}{\medskip}
 
+\newcommand{\specialcell}[2][c]{%
+ \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
 \newcommand\E{\mathbb{E}}
 
@@ -169,13 +171,32 @@
   same window size over multiple runs?
 }
 
+We tried several different windows sizes in increments of 5 packets. The raw
+numbers are shown in the table:
+
+\begin{table}[h]
+  \centering
+  \caption{Throughput and Delay vs Fixed Window Size}
+  \label{tab:fixed_window}
+  \begin{tabular}{rrr}
+    \toprule
+    \textbf{\specialcell{Window &   &   \\Size}} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} \\
+    \midrule
+    5                           & 1.05 & 109 \\ % +/- a few ms
+    10                          & 1.93 & 155 \\ % +/- a few ms
+    15                          & 2.66 & 212 \\ % +/- a few ms
+    50                          & 4.76 & 607 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 % \vfill
 % \pagebreak
 
 \section*{Exercise B}
 \emph{
- Implement a simple AIMD scheme, similar to TCP's congestion-avoidance phase.
- How well does this work? What constants did you choose?
+  Implement a simple AIMD scheme, similar to TCP's congestion-avoidance phase.
+  How well does this work? What constants did you choose?
 }
 
 \section*{Exercise C}
