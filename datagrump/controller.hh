@@ -20,6 +20,9 @@ public:
   /* Default constructor */
   Controller( const bool debug );
 
+  /* Default destructor */
+  virtual ~Controller() = default;
+
   /* Get current window size, in datagrams */
   virtual unsigned int window_size( void );
 
