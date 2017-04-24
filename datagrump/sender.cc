@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 
 #include "socket.hh"
 #include "contest_message.hh"
@@ -16,7 +17,7 @@ class DatagrumpSender
 {
 private:
   UDPSocket socket_;
-  Controller controller_; /* your class */
+  std::unique_ptr<Controller> controller_; /* your class */
 
   uint64_t sequence_number_; /* next outgoing sequence number */
 
@@ -62,7 +63,7 @@ DatagrumpSender::DatagrumpSender( const char * const host,
 				  const char * const port,
 				  const bool debug )
   : socket_(),
-    controller_( debug ),
+    controller_( new Controller(debug) ),
     sequence_number_( 0 ),
     next_ack_expected_( 0 )
 {
@@ -89,7 +90,7 @@ void DatagrumpSender::got_ack( const uint64_t timestamp,
 			    ack.header.ack_sequence_number + 1 );
 
   /* Inform congestion controller */
-  controller_.ack_received( ack.header.ack_sequence_number,
+  controller_->ack_received( ack.header.ack_sequence_number,
 			    ack.header.ack_send_timestamp,
 			    ack.header.ack_recv_timestamp,
 			    timestamp );
@@ -105,13 +106,13 @@ void DatagrumpSender::send_datagram( void )
   socket_.send( cm.to_string() );
 
   /* Inform congestion controller */
-  controller_.datagram_was_sent( cm.header.sequence_number,
+  controller_->datagram_was_sent( cm.header.sequence_number,
 				 cm.header.send_timestamp );
 }
 
 bool DatagrumpSender::window_is_open( void )
 {
-  return sequence_number_ - next_ack_expected_ < controller_.window_size();
+  return sequence_number_ - next_ack_expected_ < controller_->window_size();
 }
 
 int DatagrumpSender::loop( void )
@@ -143,7 +144,7 @@ int DatagrumpSender::loop( void )
 
   /* Run these two rules forever */
   while ( true ) {
-    const auto ret = poller.poll( controller_.timeout_ms() );
+    const auto ret = poller.poll( controller_->timeout_ms() );
     if ( ret.result == PollResult::Exit ) {
       return ret.exit_status;
     } else if ( ret.result == PollResult::Timeout ) {
