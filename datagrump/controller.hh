@@ -7,7 +7,7 @@
 
 class Controller
 {
-private:
+protected:
   bool debug_; /* Enables debugging output */
 
   /* Add member variables here */
@@ -24,21 +24,21 @@ public:
   virtual ~Controller() = default;
 
   /* Get current window size, in datagrams */
-  virtual unsigned int window_size( void );
+  virtual unsigned int window_size( void ) = 0;
 
   /* A datagram was sent */
   virtual void datagram_was_sent( const uint64_t sequence_number,
-			  const uint64_t send_timestamp );
+			  const uint64_t send_timestamp ) = 0;
 
   /* An ack was received */
   virtual void ack_received( const uint64_t sequence_number_acked,
 		     const uint64_t send_timestamp_acked,
 		     const uint64_t recv_timestamp_acked,
-		     const uint64_t timestamp_ack_received );
+		     const uint64_t timestamp_ack_received ) = 0;
 
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
-  virtual unsigned int timeout_ms( void );
+  virtual unsigned int timeout_ms( void ) = 0;
 };
 
 #endif

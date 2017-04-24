@@ -8,6 +8,7 @@
 #include "contest_message.hh"
 #include "controller.hh"
 #include "poller.hh"
+#include "exercise_controllers.hh"
 
 using namespace std;
 using namespace PollerShortNames;
@@ -63,7 +64,7 @@ DatagrumpSender::DatagrumpSender( const char * const host,
 				  const char * const port,
 				  const bool debug )
   : socket_(),
-    controller_( new Controller(debug) ),
+    controller_( new DefaultController(debug) ),
     sequence_number_( 0 ),
     next_ack_expected_( 0 )
 {
