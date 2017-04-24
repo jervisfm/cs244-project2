@@ -64,10 +64,17 @@ DatagrumpSender::DatagrumpSender( const char * const host,
 				  const char * const port,
 				  const bool debug )
   : socket_(),
-    controller_( new DefaultController(debug) ),
+    controller_( nullptr ),
     sequence_number_( 0 ),
     next_ack_expected_( 0 )
 {
+  // Pick one of the available controllers for testing.
+  controller_.reset(new DefaultController(debug));
+  //controller_.reset(new ExAController(debug));
+  //controller_.reset(new ExBController(debug));
+  //controller_.reset(new ExCController(debug));
+  //controller_.reset(new ExDController(debug));
+
   /* turn on timestamps when socket receives a datagram */
   socket_.set_timestamps();
 
