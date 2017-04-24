@@ -21,6 +21,5 @@ public:
 
     unsigned int timeout_ms( void ) override;
 };
-};
 
 #endif
