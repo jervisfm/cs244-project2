@@ -23,6 +23,7 @@
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{mathtools}
+\usepackage{svg}
 \usepackage{tikz}
 \usepackage{float}
 \usepackage[colorinlistoftodos]{todonotes}
@@ -178,17 +179,48 @@ numbers are shown in the table:
   \centering
   \caption{Throughput and Delay vs Fixed Window Size}
   \label{tab:fixed_window}
-  \begin{tabular}{rrr}
+  \scriptsize
+  \begin{tabular}{rrrr}
     \toprule
-    \textbf{\specialcell{Window &   &   \\Size}} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} \\
+    \textbf{\specialcell{Window\\Size}} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
     \midrule
-    5                           & 1.05 & 109 \\ % +/- a few ms
-    10                          & 1.93 & 155 \\ % +/- a few ms
-    15                          & 2.66 & 212 \\ % +/- a few ms
-    50                          & 4.76 & 607 \\
+    5                           & 1.05 & 109 & 9.63           \\ % +/- a few ms
+    10                          & 1.93 & 155 & 12.45          \\
+    15                          & 2.66 & 212 & \textbf{12.55} \\
+    20                          & 3.26 & 277 & 11.77          \\
+    25                          & 3.73 & 343 & 10.87          \\
+    30                          & 4.07 & 401 & 10.15          \\
+    35                          & 4.32 & 453 & 9.54           \\
+    40                          & 4.51 & 504 & 8.95           \\
+    45                          & 4.65 & 557 & 8.35           \\
+    50                          & 4.76 & 607 & 7.84           \\
+    55                          & 4.85 & 652 & 7.44           \\
+    60                          & 4.91 & 711 & 6.91           \\
+    65                          & 4.94 & 763 & 6.48           \\
+    70                          & 4.96 & 808 & 6.13           \\
+    75                          & 4.98 & 855 & 5.82           \\
+    80                          & 4.99 & 896 & 5.57           \\
+    85                          & 5.00 & 935 & 5.34           \\
+    90                          & 5.00 & 972 & 5.14           \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+These values are plotted as a 2D graph of throughput vs 95-percentile signal
+delay in Figure~\ref{fig:throughput_delay}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=3cm]{./img/exa_throughput_delay.pdf}
+  \caption{Throughput vs 95-percentile Signal Delay for varying fixed window size.}
+  \label{fig:throughput_delay}
+\end{figure}
+
+To answer the questions, we found that the best score was at a fixed window
+size of about 15 packets. The measurements taken with the same window size
+over multiple runs were very repeatable, in the mahimahi environment. The
+throughput and delays only varied slightly (i.e. $\pm$ a few hundreths of Mbps
+or a few ms).
 
 % \vfill
 % \pagebreak
