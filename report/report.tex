@@ -185,7 +185,7 @@ $throughput / delay$, and the best score is shown in bold.
   \toprule
   \textbf{\specialcell{Window\\Size}} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
   \midrule
-  5                           & 1.05          & 109          & 9.63           \\ % +/- a few ms
+  5                           & 1.05          & 109          & 9.63           \\
   10                          & 1.93          & 155          & 12.45          \\
   \textbf{15}                 & \textbf{2.66} & \textbf{212} & \textbf{12.55} \\
   20                          & 3.26          & 277          & 11.77          \\
@@ -231,6 +231,28 @@ or a few ms).
   Implement a simple AIMD scheme, similar to TCP's congestion-avoidance phase.
   How well does this work? What constants did you choose?
 }
+
+For this exercise, we implemented a simple AIMD protocol, which increments the
+\texttt{cwnd} by \texttt{alpha} on each ack, and decreases the window by
+\texttt{beta} on a loss event (i.e. $cwnd = cwnd / beta$). We tried a few of
+different values for these constants, and recorded their performance in
+Table~\ref{tab:aimd}.
+
+\begin{table}[h]
+  \centering
+  \caption{Throughput and Delay for for various AIMD constants}
+  \label{tab:aimd}
+  \scriptsize
+  \begin{tabular}{rrrrr}
+    \toprule
+    \textbf{Alpha} & \textbf{Beta} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
+    \midrule
+    1              & 2            & XXX                             & XXX & XXX \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+We found that [stuff]
 
 \section*{Exercise C}
 \emph{
