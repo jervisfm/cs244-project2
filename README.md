@@ -33,6 +33,7 @@ To view real time live traces, make sure that you run the command under a suitab
 One way to do that is to re-use the X session in the VM while SSH'ed in.
 ```
 $ export DISPLAY=:0
+$ runcontest
 ```
 
 
