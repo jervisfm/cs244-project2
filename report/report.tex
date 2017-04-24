@@ -1,18 +1,11 @@
 \documentclass[twoside]{article}
-\setlength{\oddsidemargin}{0.25 in}
-\setlength{\evensidemargin}{-0.25 in}
-\setlength{\topmargin}{-0.6 in}
-\setlength{\textwidth}{6.5 in}
-\setlength{\textheight}{8.5 in}
-\setlength{\headsep}{0.75 in}
-\setlength{\parindent}{0 in}
-\setlength{\parskip}{0.1 in}
 
 %
 % ADD PACKAGES here:
 %
 
 \usepackage{amsmath,amsfonts,graphicx}
+\usepackage[letterpaper, margin=1in]{geometry}
 
 % Imports for writing pseudocode
 \usepackage{algorithm}
@@ -23,7 +16,6 @@
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{mathtools}
-\usepackage{svg}
 \usepackage{tikz}
 \usepackage{float}
 \usepackage[colorinlistoftodos]{todonotes}
@@ -220,11 +212,11 @@ delay in Figure~\ref{fig:throughput_delay}.
 To answer the questions, we found that the best score was at a fixed window
 size of about 15 packets. The measurements taken with the same window size
 over multiple runs were very repeatable, in the mahimahi environment. The
-throughput and delays only varied slightly (i.e. $\pm$ a few hundreths of Mbps
+throughput and delays only varied slightly (i.e. $\pm$ a few hundredths of Mbps
 or a few ms).
 
-% \vfill
-% \pagebreak
+\vfill
+\pagebreak
 
 \section*{Exercise B}
 \emph{
@@ -253,6 +245,9 @@ Table~\ref{tab:aimd}.
 \end{table}
 
 We found that [stuff]
+
+\vfill
+\pagebreak
 
 \section*{Exercise C}
 \emph{
