@@ -102,6 +102,7 @@
 \newtheorem{theorem}{Theorem}[lecnum]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{question}[theorem]{Question}
 \newtheorem{claim}[theorem]{Claim}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{definition}[theorem]{Definition}
@@ -155,14 +156,15 @@
 
 
 \section*{Exercise A}
-\emph{
+
+\begin{question}
   Vary the fixed window size by editing controller.cc to see what happens.
   Make a 2D graph of throughput vs. 95-percentile signal delay (similar to what
   is seen on the contest analysis URLs) as you vary this value. What is the
   best single window size that you can find to maximize the overall "score"
   (log throughput/delay)? How repeatable are the measurements taken with the
   same window size over multiple runs?
-}
+\end{question}
 
 We tried several different windows sizes in increments of 5 packets. The raw
 numbers are shown in Table~\ref{tab:fixed_window}. Score is calculated as
@@ -219,10 +221,10 @@ or a few ms).
 \pagebreak
 
 \section*{Exercise B}
-\emph{
+\begin{question}
   Implement a simple AIMD scheme, similar to TCP's congestion-avoidance phase.
   How well does this work? What constants did you choose?
-}
+\end{question}
 
 For this exercise, we implemented a simple AIMD protocol, which increments the
 \texttt{cwnd} by \texttt{alpha} on each ack, and decreases the window by
@@ -250,25 +252,25 @@ We found that [stuff]
 \pagebreak
 
 \section*{Exercise C}
-\emph{
+\begin{question}
   Implement a simple delay-triggered scheme, where the window rises or falls
   based on whether the round-trip-time crosses some threshold value. Experiment
   with a few thresholds or tweaks and report on what worked the best.
-}
+\end{question}
 
 \section*{Exercise D}
-\emph{
+\begin{question}
   Try different approaches and work to maximize your score on the final
   evaluation. Be wary about "overtraining": after the contest is over, we
   will collect new network traces and then run everybody's entries over the
   newly-collected evaluation trace. In your report, please explain your
   approach, including the important decisions you had to make and how you made
   them. Include illustrative plots.
-}
+\end{question}
 \section*{Exercise E}
-\emph{
+\begin{question}
   Pick a cool name for your scheme!
-}
+\end{question}
 
 
 % =============================================================================
