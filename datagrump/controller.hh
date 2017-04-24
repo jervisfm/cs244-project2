@@ -21,21 +21,21 @@ public:
   Controller( const bool debug );
 
   /* Get current window size, in datagrams */
-  unsigned int window_size( void );
+  virtual unsigned int window_size( void );
 
   /* A datagram was sent */
-  void datagram_was_sent( const uint64_t sequence_number,
+  virtual void datagram_was_sent( const uint64_t sequence_number,
 			  const uint64_t send_timestamp );
 
   /* An ack was received */
-  void ack_received( const uint64_t sequence_number_acked,
+  virtual void ack_received( const uint64_t sequence_number_acked,
 		     const uint64_t send_timestamp_acked,
 		     const uint64_t recv_timestamp_acked,
 		     const uint64_t timestamp_ack_received );
 
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
-  unsigned int timeout_ms( void );
+  virtual unsigned int timeout_ms( void );
 };
 
 #endif
