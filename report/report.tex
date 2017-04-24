@@ -173,7 +173,8 @@
 }
 
 We tried several different windows sizes in increments of 5 packets. The raw
-numbers are shown in the table:
+numbers are shown in Table~\ref{tab:fixed_window}. Score is calculated as
+$throughput / delay$, and the best score is shown in bold.
 
 \begin{table}[h]
   \centering
@@ -186,7 +187,7 @@ numbers are shown in the table:
     \midrule
     5                           & 1.05 & 109 & 9.63           \\ % +/- a few ms
     10                          & 1.93 & 155 & 12.45          \\
-    15                          & 2.66 & 212 & \textbf{12.55} \\
+    \textbf{15}                          & \textbf{2.66} & \textbf{212} & \textbf{12.55} \\
     20                          & 3.26 & 277 & 11.77          \\
     25                          & 3.73 & 343 & 10.87          \\
     30                          & 4.07 & 401 & 10.15          \\
