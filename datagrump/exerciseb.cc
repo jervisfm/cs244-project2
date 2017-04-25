@@ -9,34 +9,35 @@ using namespace std;
 
 /* Default constructor */
 ExBController::ExBController( const bool debug )
-        : Controller::Controller( debug )
-{}
+        : Controller::Controller( debug ), cwnd_(10), alpha_(1), beta_(2)
+{
+    cerr << "Exercise B" << endl;
+}
 
 /* Get current window size, in datagrams */
 unsigned int ExBController::window_size( void )
 {
   /* Default: fixed window size of 100 outstanding datagrams */
-  unsigned int the_window_size = 50;
+  // unsigned int the_window_size = 50;
 
   if ( debug_ ) {
     cerr << "At time " << timestamp_ms()
-         << " window size is " << the_window_size << endl;
+         << " window size is " << cwnd_ << endl;
   }
 
-  return the_window_size;
+  return cwnd_;
 }
 
 /* A datagram was sent */
-void ExBController::datagram_was_sent( const uint64_t sequence_number,
-        /* of the sent datagram */
-                                       const uint64_t send_timestamp )
-/* in milliseconds */
+void ExBController::datagram_was_sent(  const uint64_t sequence_number, /* of the sent datagram */
+                                        const uint64_t send_timestamp, /* in milliseconds */
+                                        bool on_timeout )
 {
   /* Default: take no action */
 
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
-         << " sent datagram " << sequence_number << endl;
+	 << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
   }
 }
 
@@ -50,7 +51,8 @@ void ExBController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t timestamp_ack_received )
 /* when the ack was received (by sender) */
 {
-  /* Default: take no action */
+  // Add alpha to cwnd on each ack
+  cwnd_ += alpha_;
 
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
@@ -65,5 +67,5 @@ void ExBController::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExBController::timeout_ms( void )
 {
-  return 1000; /* timeout of one second */
+  return 500; /* timeout of one second */
 }

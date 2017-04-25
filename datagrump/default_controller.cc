@@ -28,14 +28,14 @@ unsigned int DefaultController::window_size( void )
 /* A datagram was sent */
 void DefaultController::datagram_was_sent( const uint64_t sequence_number,
 				    /* of the sent datagram */
-				    const uint64_t send_timestamp )
+				    const uint64_t send_timestamp, bool on_timeout )
                                     /* in milliseconds */
 {
   /* Default: take no action */
 
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
-	 << " sent datagram " << sequence_number << endl;
+	 << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
   }
 }
 

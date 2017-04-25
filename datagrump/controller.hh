@@ -18,7 +18,7 @@ public:
      the call site as well (in sender.cc) */
 
   /* Default constructor */
-  Controller( const bool debug );
+  Controller( const bool debug ): debug_(debug){}
 
   /* Default destructor */
   virtual ~Controller() = default;
@@ -28,7 +28,7 @@ public:
 
   /* A datagram was sent */
   virtual void datagram_was_sent( const uint64_t sequence_number,
-			  const uint64_t send_timestamp ) = 0;
+			  const uint64_t send_timestamp, bool on_timeout ) = 0;
 
   /* An ack was received */
   virtual void ack_received( const uint64_t sequence_number_acked,
