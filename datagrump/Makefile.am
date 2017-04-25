@@ -9,7 +9,9 @@ default_controller = default_controller.hh default_controller.cc
 exercise_a_source = exercisea.hh exercisea.cc
 exercise_b_source = exerciseb.hh exerciseb.cc
 exercise_c_source = exercisec.hh exercisec.cc
-exercise_d_source = exercised.hh exercised.cc
+exercise_d_source = exercised.hh exercised.cc \
+                    exercised_jm.hh exercised_jm.cc \
+                    exercised_lh.hh exercised_lh.cc
 exercise_sources = $(default_controller) $(exercise_a_source) $(exercise_b_source) $(exercise_c_source) $(exercise_d_source)
 
 bin_PROGRAMS = sender receiver

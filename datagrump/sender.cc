@@ -74,6 +74,8 @@ DatagrumpSender::DatagrumpSender( const char * const host,
   controller_.reset(new ExBController(debug));
   //controller_.reset(new ExCController(debug));
   //controller_.reset(new ExDController(debug));
+  //controller_.reset(new ExDJMController(debug));  // Controller for Jervis M.
+  //controller_.reset(new ExDLHController(debug));  // Controler for Luke H.
 
   /* turn on timestamps when socket receives a datagram */
   socket_.set_timestamps();
