@@ -8,7 +8,7 @@ private:
     int alpha_;
     int beta_;
     // RTT Threshold to adjust cwnd.
-    int rtt_thresh_ms_;
+    const int rtt_thresh_ms_;
 
 public:
     ExCController( const bool debug);
