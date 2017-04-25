@@ -33,14 +33,16 @@ void ExBController::datagram_was_sent(  const uint64_t sequence_number, /* of th
                                         const uint64_t send_timestamp, /* in milliseconds */
                                         bool on_timeout )
 {
-  /* Default: take no action */
+  // We used a fixed timeout as the signal for multiplicative decrease.
+  // Note that in our mahimahi environment, there is no loss, and there are
+  // unbounded queues on the bottleneck path.
   if (on_timeout) {
-    // Multiplicative Decrease
+    // Multiplicative Decrease: Divide cwnd by beta on timeout
     if ( debug_ ) {
       cerr << ">>> cwnd decrease from " << cwnd_
-       << " to " << cwnd_ / beta_ << " using beta=" << beta_ << endl;
+       << " to " << max(cwnd_ / beta_, 1.0) << " using beta=" << beta_ << endl;
     }
-    cwnd_ = cwnd_ / beta_;
+    cwnd_ = max(cwnd_ / beta_, 1.0); // min cwnd = 1
   }
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
@@ -58,7 +60,7 @@ void ExBController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t timestamp_ack_received )
 /* when the ack was received (by sender) */
 {
-  // Add alpha to cwnd on each ack
+  // Additive Increase: Add alpha/cwnd to cwnd on each ack
   cwnd_ += (double) alpha_ / cwnd_;
   if ( debug_ ) {
     cerr << ">>> cwnd increase from " << cwnd_ - ((double) alpha_ / cwnd_)
@@ -77,5 +79,5 @@ void ExBController::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExBController::timeout_ms( void )
 {
-  return 40; /* timeout in milliseconds */
+  return 80; /* timeout in milliseconds */
 }
