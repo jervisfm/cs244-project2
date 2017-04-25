@@ -5,10 +5,10 @@ class ExCController : public Controller {
 
 private:
     double cwnd_;
-    int alpha_;
-    int beta_;
+    double alpha_;
+    double beta_;
     // RTT Threshold to adjust cwnd.
-    const int rtt_thresh_ms_;
+    const double rtt_thresh_ms_;
 
 public:
     ExCController( const bool debug);

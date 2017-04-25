@@ -9,7 +9,7 @@ using namespace std;
 
 /* Default constructor */
 ExCController::ExCController( const bool debug )
-  : Controller::Controller( debug ), cwnd_(10), alpha_(1), beta_(2), rtt_thresh_ms_(100)
+  : Controller::Controller( debug ), cwnd_(10), alpha_(0.1), beta_(1.5), rtt_thresh_ms_(100)
 {
     cerr << "Exercise C" << endl;
 }
@@ -80,5 +80,5 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExCController::timeout_ms( void )
 {
-  return 40; /* timeout in milliseconds */
+  return 1000; /* timeout in milliseconds */
 }
