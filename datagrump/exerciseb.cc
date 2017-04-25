@@ -9,7 +9,7 @@ using namespace std;
 
 /* Default constructor */
 ExBController::ExBController( const bool debug )
-        : Controller::Controller( debug ), cwnd_(10), alpha_(1), beta_(2)
+        : Controller::Controller( debug ), cwnd_(10), alpha_(0.1), beta_(1.5)
 {
     cerr << "Exercise B" << endl;
 }
