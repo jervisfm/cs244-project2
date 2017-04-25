@@ -161,7 +161,7 @@
   Vary the fixed window size by editing controller.cc to see what happens.
   Make a 2D graph of throughput vs. 95-percentile signal delay (similar to what
   is seen on the contest analysis URLs) as you vary this value. What is the
-  best single window size that you can find to maximize the overall "score"
+  best single window size that you can find to maximize the overall ``score''
   (log throughput/delay)? How repeatable are the measurements taken with the
   same window size over multiple runs?
 \end{question}
@@ -246,7 +246,7 @@ more aggressive or timid is growth and decrease affected the power score.
 
 \begin{table}[h]
   \centering
-  \caption{Throughput and Delay for for various AIMD constants}
+  \caption{Throughput and Delay for various AIMD constants}
   \label{tab:aimd}
   \scriptsize
   \begin{tabular}{rrrrr}
@@ -287,10 +287,42 @@ table) are not optimal.
   with a few thresholds or tweaks and report on what worked the best.
 \end{question}
 
+We implemented a simple scheme that increases or decreases the window size
+based on an RTT threshold. On each ACK, we calculate the RTT of the particular
+packet and increase the window size if the RTT is less than the threshold, or
+decrease the window size if the measured RTT is greater than the threshold.
+The amount of increase and decrease are defined by the constants
+\texttt{win\_inc} and \texttt{win\_dec}, respectively. For example, if the
+measured RTT is greater than \texttt{rtt\_thresh}, $cwnd = cwnd - win\_inc$.
+This results in exponential increase and decrease of the window based on delay.
+
+We experiment with several values of our three constants: \texttt{win\_inc},
+\texttt{win\_dec}, and \texttt{rtt\_thresh}, and summarize the results in
+Table~\ref{tab:delay}
+
+\begin{table}[h]
+  \centering
+  \caption{Performance of Delay-based Congestion Control}
+  \label{tab:delay}
+  \scriptsize
+  \begin{tabular}{rrrrrr}
+    \toprule
+    \textbf{win\_inc} & \textbf{win\_dec} & \textbf{rtt\_thresh} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
+    \midrule
+    1 & 1              & 2             & 4.72          & 847          & 5.57           \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+We find that
+
+\vfill
+\pagebreak
+
 \section*{Exercise D}
 \begin{question}
   Try different approaches and work to maximize your score on the final
-  evaluation. Be wary about "overtraining": after the contest is over, we
+  evaluation. Be wary about ``overtraining'': after the contest is over, we
   will collect new network traces and then run everybody's entries over the
   newly-collected evaluation trace. In your report, please explain your
   approach, including the important decisions you had to make and how you made
@@ -300,7 +332,7 @@ table) are not optimal.
 \begin{question}
   Pick a cool name for your scheme!
 \end{question}
-
+Rocinante
 
 % =============================================================================
 \end{document}
