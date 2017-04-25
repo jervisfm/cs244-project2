@@ -71,11 +71,11 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
   if (rtt_delay_ms > rtt_thresh_ms_) {
     double diff_ms = rtt_delay_ms - rtt_thresh_ms_;
     if (debug_) {
-      cerr << "Exceeded RTT Threshold by " << diff_ms << "ms. Reducing Window size";
+      cerr << "Exceeded RTT Threshold by " << diff_ms << "ms. Reducing Window size" << endl;
     }
   } else {
     if (debug_) {
-      cerr << "Still within RTT threshold limits";
+      cerr << "Still within RTT threshold limits" << endl;
     }
   }
 }
