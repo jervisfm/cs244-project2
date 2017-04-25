@@ -65,13 +65,13 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
     if (debug_) {
       cerr << "<<< Exceeded RTT Threshold by " << diff_ms << "ms. Reducing Window size" << endl;
       cwnd_ -= 1;
-      cwnd_ = std::max(cwnd_, 1);
+      cwnd_ = std::max(cwnd_, 1.0);
     }
   } else {
     if (debug_) {
       cerr << "Still within RTT threshold limits, increasing cwnd" << endl;
       cwnd_ += 1;
-      cwnd_ = std::max(cwnd_, 1);
+      cwnd_ = std::max(cwnd_, 1.0);
     }
   }
 }
