@@ -58,12 +58,8 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t timestamp_ack_received )
 /* when the ack was received (by sender) */
 {
-  // Add alpha to cwnd on each ack
-  cwnd_ += (double) alpha_ / cwnd_;
-  if ( debug_ ) {
-    cerr << ">>> cwnd increase from " << cwnd_ - ((double) alpha_ / cwnd_)
-     << " to " << cwnd_  << " using alpha=" << alpha_ << endl;
-  }
+  // TODO: Increse window size +1) when RTT above rtt_thresh_ms_ and
+  // reduce it by -1 when RTT below rtt_thresh_ms_
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
          << " received ack for datagram " << sequence_number_acked
