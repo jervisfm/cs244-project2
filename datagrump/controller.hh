@@ -30,7 +30,13 @@ public:
   virtual void datagram_was_sent( const uint64_t sequence_number,
 			  const uint64_t send_timestamp, bool on_timeout ) = 0;
 
-  /* An ack was received */
+  /* Method called when An ack was received.
+   * Arguments:
+   * sequence_number_acked: what sequence number was acknowledged
+   * send_timestamp_acked:  when the acknowledged datagram was sent (sender's clock)
+   * recv_timestamp_acked:  when the acknowledged datagram was received (receiver's clock)
+   * timestamp_ack_received:  when the ack was received (by sender).
+   */
   virtual void ack_received( const uint64_t sequence_number_acked,
 		     const uint64_t send_timestamp_acked,
 		     const uint64_t recv_timestamp_acked,

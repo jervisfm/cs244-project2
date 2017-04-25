@@ -50,13 +50,10 @@ void ExCController::datagram_was_sent(  const uint64_t sequence_number, /* of th
 
 /* An ack was received */
 void ExCController::ack_received( const uint64_t sequence_number_acked,
-        /* what sequence number was acknowledged */
                                   const uint64_t send_timestamp_acked,
-        /* when the acknowledged datagram was sent (sender's clock) */
                                   const uint64_t recv_timestamp_acked,
-        /* when the acknowledged datagram was received (receiver's clock)*/
                                   const uint64_t timestamp_ack_received )
-/* when the ack was received (by sender) */
+
 {
   // TODO: Increse window size +1) when RTT above rtt_thresh_ms_ and
   // reduce it by -1 when RTT below rtt_thresh_ms_
