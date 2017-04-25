@@ -2,6 +2,12 @@
 #define EXERCISE_C_CONTROLLER_HH
 
 class ExCController : public Controller {
+
+private:
+    double cwnd_;
+    int alpha_;
+    int beta_;
+
 public:
     ExCController( const bool debug);
 
