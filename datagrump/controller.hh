@@ -41,4 +41,6 @@ public:
   virtual unsigned int timeout_ms( void ) = 0;
 };
 
+
+
 #endif
