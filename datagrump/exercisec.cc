@@ -34,14 +34,6 @@ void ExCController::datagram_was_sent(  const uint64_t sequence_number, /* of th
                                         bool on_timeout )
 {
   /* Default: take no action */
-  if (on_timeout) {
-    // Multiplicative Decrease
-    if ( debug_ ) {
-      cerr << ">>> cwnd decrease from " << cwnd_
-       << " to " << cwnd_ / beta_ << " using beta=" << beta_ << endl;
-    }
-    cwnd_ = cwnd_ / beta_;
-  }
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
      << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
@@ -71,11 +63,15 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
   if (rtt_delay_ms > rtt_thresh_ms_) {
     double diff_ms = rtt_delay_ms - rtt_thresh_ms_;
     if (debug_) {
-      cerr << "Exceeded RTT Threshold by " << diff_ms << "ms. Reducing Window size" << endl;
+      cerr << "<<< Exceeded RTT Threshold by " << diff_ms << "ms. Reducing Window size" << endl;
+      cwnd_ -= 1;
+      cwnd_ = std::max(cwnd_, 1);
     }
   } else {
     if (debug_) {
-      cerr << "Still within RTT threshold limits" << endl;
+      cerr << "Still within RTT threshold limits, increasing cwnd" << endl;
+      cwnd_ += 1;
+      cwnd_ = std::max(cwnd_, 1);
     }
   }
 }
