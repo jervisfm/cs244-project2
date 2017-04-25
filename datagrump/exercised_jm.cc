@@ -10,7 +10,9 @@ using namespace std;
 /* Default constructor */
 ExDJMController::ExDJMController( const bool debug )
         : Controller::Controller( debug )
-{}
+{
+  cerr << "Exercise D Jervis Controller" << endl;
+}
 
 /* Get current window size, in datagrams */
 unsigned int ExDJMController::window_size( void )

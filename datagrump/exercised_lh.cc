@@ -10,7 +10,9 @@ using namespace std;
 /* Default constructor */
 ExDLHController::ExDLHController( const bool debug )
         : Controller::Controller( debug )
-{}
+{
+   cerr << "Exercise D Luke Controller" << endl;
+}
 
 /* Get current window size, in datagrams */
 unsigned int ExDLHController::window_size( void )
