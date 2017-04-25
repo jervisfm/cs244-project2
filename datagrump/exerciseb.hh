@@ -4,7 +4,7 @@
 class ExBController : public Controller {
 
 private:
-    int cwnd_;
+    double cwnd_;
     int alpha_;
     int beta_;
 

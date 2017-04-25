@@ -25,7 +25,7 @@ unsigned int ExBController::window_size( void )
          << " window size is " << cwnd_ << endl;
   }
 
-  return cwnd_;
+  return (unsigned int) cwnd_;
 }
 
 /* A datagram was sent */
@@ -34,10 +34,17 @@ void ExBController::datagram_was_sent(  const uint64_t sequence_number, /* of th
                                         bool on_timeout )
 {
   /* Default: take no action */
-
+  if (on_timeout) {
+    // Multiplicative Decrease
+    if ( debug_ ) {
+      cerr << ">>> cwnd decrease from " << cwnd_
+       << " to " << cwnd_ / beta_ << " using beta=" << beta_ << endl;
+    }
+    cwnd_ = cwnd_ / beta_;
+  }
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
-	 << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
+     << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
   }
 }
 
@@ -52,8 +59,11 @@ void ExBController::ack_received( const uint64_t sequence_number_acked,
 /* when the ack was received (by sender) */
 {
   // Add alpha to cwnd on each ack
-  cwnd_ += alpha_;
-
+  cwnd_ += (double) alpha_ / cwnd_;
+  if ( debug_ ) {
+    cerr << ">>> cwnd increase from " << cwnd_ - ((double) alpha_ / cwnd_)
+     << " to " << cwnd_  << " using alpha=" << alpha_ << endl;
+  }
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
          << " received ack for datagram " << sequence_number_acked
@@ -67,5 +77,5 @@ void ExBController::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExBController::timeout_ms( void )
 {
-  return 500; /* timeout of one second */
+  return 40; /* timeout in milliseconds */
 }
