@@ -57,11 +57,14 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
 {
   // TODO: Increse window size +1) when RTT above rtt_thresh_ms_ and
   // reduce it by -1 when RTT below rtt_thresh_ms_
+  double rtt_delay_ms = timestamp_ack_received - send_timestamp_acked;
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
          << " received ack for datagram " << sequence_number_acked
-         << " (send @ time " << send_timestamp_acked
-         << ", received @ time " << recv_timestamp_acked << " by receiver's clock)"
+         << " (sent:" << send_timestamp_acked
+         << ", received: " << recv_timestamp_acked << ")"
+         << ", receive_ack: "  << timestamp_ack_received
+         << ", rtt_delay_ms: " << rtt_delay_ms
          << endl;
   }
 }
