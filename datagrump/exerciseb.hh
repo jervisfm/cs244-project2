@@ -5,8 +5,8 @@ class ExBController : public Controller {
 
 private:
     double cwnd_;
-    int alpha_;
-    int beta_;
+    double alpha_;
+    double beta_;
 
 public:
     ExBController( const bool debug);
