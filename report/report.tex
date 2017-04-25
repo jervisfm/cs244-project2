@@ -307,13 +307,26 @@ Table~\ref{tab:delay}
     \toprule
     \textbf{alpha} & \textbf{beta} & \textbf{rtt\_thresh (ms)} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
     \midrule
+    1   & 20     & 100  & 3.30  & 149  & 22.15  \\
     1   & 10     & 100  & 3.76  & 155  & 24.26  \\
-
+    1   & 5      & 100  & 4.32  & 190  & 22.26  \\
+    1   & 1      & 100  & 4.81  & 497  & 9.68  \\
+    1   & 10     & 150  & 4.43  & 820  & 5.40  \\
+    \textbf{1}   & \textbf{10}     & \textbf{90}   & \textbf{3.57}  & \textbf{137}  & \textbf{26.06}  \\
+    1   & 10     & 85   & 3.34  & 136  & 24.56  \\
+    1   & 10     & 80   & 3.15  & 129  & 24.42  \\
+    1   & 10     & 70   & 2.57  & 119  & 21.60  \\
+    10  & 10     & 90   & 4.75  & 237  & 20.04  \\
+    10  & 1      & 90   & 4.89  & 924  & 5.29   \\
+    10  & 1      & 60   & 4.89  & 924  & 5.29   \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-We found that
+We found that using this approach, we achieved the best performance when the
+additive decrease occurred at a faster rate than the additive increase in order
+to quickly allow the queues to drain when a particular RTT is exceeded to reduce
+the queueing delay. We also found that the best RTT threshold was about 90ms.
 
 \vfill
 \pagebreak
