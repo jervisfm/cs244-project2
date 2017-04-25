@@ -27,16 +27,15 @@ unsigned int ExCController::window_size( void )
 }
 
 /* A datagram was sent */
-void ExCController::datagram_was_sent( const uint64_t sequence_number,
-        /* of the sent datagram */
-                                       const uint64_t send_timestamp )
-/* in milliseconds */
+void ExCController::datagram_was_sent(  const uint64_t sequence_number, /* of the sent datagram */
+                                        const uint64_t send_timestamp, /* in milliseconds */
+                                        bool on_timeout )
 {
   /* Default: take no action */
 
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
-         << " sent datagram " << sequence_number << endl;
+	 << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
   }
 }
 

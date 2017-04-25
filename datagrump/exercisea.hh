@@ -9,7 +9,8 @@ public:
     unsigned int window_size() override;
 
     void datagram_was_sent( const uint64_t sequence_number,
-                            const uint64_t send_timestamp) override ;
+                            const uint64_t send_timestamp,
+                            bool on_timeout) override ;
 
     void ack_received( const uint64_t sequence_number_acked,
             /* what sequence number was acknowledged */

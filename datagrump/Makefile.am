@@ -3,7 +3,7 @@ AM_CXXFLAGS = $(PICKY_CXXFLAGS)
 LDADD = ../src/libsourdough.a -lpthread
 
 common_source = contest_message.hh contest_message.cc \
-	controller.hh controller.cc
+	controller.hh
 
 default_controller = default_controller.hh default_controller.cc
 exercise_a_source = exercisea.hh exercisea.cc
