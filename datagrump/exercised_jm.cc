@@ -13,7 +13,12 @@ static const int PACKET_SIZE_BYTES = 1472;
 
 /* Default constructor */
 ExDJMController::ExDJMController( const bool debug )
-  : Controller::Controller( debug ), cwnd_gain_(0.8), num_bytes_sent_(0), rtt_samples_(), time_to_data_map_()
+  : Controller::Controller( debug ),
+    cwnd_gain_(0.8),
+    num_bytes_sent_(0),
+    last_sequence_number_acked_(0),
+    rtt_samples_(),
+    time_to_data_map_()
           
 {
   cerr << "Exercise D Jervis Controller" << endl;
@@ -86,9 +91,11 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
 {
   /* Default: take no action */
 
+  // Gather data for RTT estimates.
   double rtt_ms = timestamp_ack_received - send_timestamp_acked;
   rtt_samples_.emplace_back(rtt_ms);
   double average_rtt_ms = average_rtt();
+  
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);

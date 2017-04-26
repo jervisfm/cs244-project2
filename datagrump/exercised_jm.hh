@@ -13,6 +13,8 @@ private:
     double cwnd_gain_;
     // Total number data bytes sent.
     double num_bytes_sent_;
+    // The greatest sequence number successfully acked so far.
+    uint64_t last_sequence_number_acked_;
     // Keeps track of all RTT samples we have seen so far.
     std::vector<double> rtt_samples_;
     // Map of time -> how much data sent at that time.
