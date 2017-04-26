@@ -217,7 +217,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
     double target_bdp = bandwidth_delay_product();
     if (inflight_bdp() <= target_bdp) {
       // Switch to cruise mode aka Probe_BW
-      switch_to_probe_bw();
+      switch_to_mode_probe_bw();
     }
   } else if (mode_probe_bw()) {
     // TODO
