@@ -17,6 +17,7 @@ static const int PACKET_SIZE_BYTES = 1472;
 ExDJMController::ExDJMController( const bool debug )
   : Controller::Controller( debug ),
     bbr_state_(BBR_STATE::STARTUP),
+    cwnd_(1),
     cwnd_gain_(0.8),
     pacing_gain_(0.9),
     num_bytes_sent_(0),
@@ -31,12 +32,16 @@ ExDJMController::ExDJMController( const bool debug )
 /* Get current window size, in datagrams */
 unsigned int ExDJMController::window_size( void )
 {
+  int window_size = 0;
 
-
-  // BBR says that the window size should be some fraction of the BDP as modulated
-  // by the cwnd gain.
-  int window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
-
+  if (mode_startup()) {
+    window_size = cwnd_;
+  } else {
+    // BBR says that the window size should be some fraction of the BDP as modulated
+    // by the cwnd gain.
+    window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
+  }
+  
   // BBR recommends always have a min window size of 4 to keep things going smoothly.
   window_size = std::max(4, window_size);
   

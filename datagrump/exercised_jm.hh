@@ -17,6 +17,8 @@ private:
     };
     // State of bbr algorithm
     BBR_STATE bbr_state_;
+    // Value to control cwnd directly in startup mode.
+    double cwnd_;
     // Factor to fudge BDP by.
     double cwnd_gain_;
     // Factor to fudge the delay by.
@@ -51,19 +53,19 @@ private:
   // Debugging test functions. Can be removed once we're confident in the implementation.
   void test_delivery_rates();
 
-  inline bool startup() {
+  inline bool mode_startup() {
     return bbr_state_ == BBR_STATE::STARTUP;
   }
 
-  inline bool probe_bw() {
+  inline bool mode_probe_bw() {
     return bbr_state_ == BBR_STATE::PROBE_BW;
   }
 
-  inline bool probe_rtt() {
+  inline bool mode_probe_rtt() {
     return bbr_state_ == BBR_STATE::PROBE_RTT;
   }
 
-  inline bool drain() {
+  inline bool mode_drain() {
     return bbr_state_ == BBR_STATE::DRAIN;
   }
   
