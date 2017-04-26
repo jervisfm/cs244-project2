@@ -37,7 +37,7 @@ unsigned int ExDJMController::window_size( void )
 
     // BBR says that the window size should be some fraction of the BDP as modulated
     // by the cwnd gain.
-    window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
+    window_size = bandwidth_delay_product() * cwnd_gain_;
 
   
   // BBR recommends always have a min window size of 4 to keep things going smoothly.
@@ -182,6 +182,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   // In start up mode, grow the cwnd exponetially.
   if (mode_startup()) {
     cwnd_gain_ = 2.0 / log(2);
+    pacing_gain_ 2.0 / log(2);
   }
   
 }
