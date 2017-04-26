@@ -34,6 +34,8 @@ unsigned int ExDJMController::window_size( void )
   // by the cwnd gain.
   int window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
 
+  // window_size = 1;
+  
   if ( debug_ ) {
     cerr << "At time " << timestamp_ms()
          << " window size is " << window_size << endl;
@@ -179,5 +181,8 @@ unsigned int ExDJMController::timeout_ms( void )
 {
   // This is equivalent to the timer callback delay in the BBR paper.
   // It's set to: PktSize / (pacing_gain * BtlBw)
-  return PACKET_SIZE_BYTES / (pacing_gain_ * sliding_max_bandwidth());
+  int timeout = PACKET_SIZE_BYTES / (pacing_gain_ * sliding_max_bandwidth());
+  timeout = std::max(timeout, 1);
+  debug_printf(INFO, "Waiting for timeout (ms): %d", timeout);
+  return timeout;
 }
