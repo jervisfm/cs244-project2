@@ -14,6 +14,9 @@ private:
     // Map of time -> how much data sent at that time.
     std::map<int, double> time_to_data_map_;
 
+  // Returns the current average rtt
+  double average_rtt();
+  
 public:
     ExDJMController( const bool debug);
 

@@ -44,4 +44,5 @@ For exercise D, we'll try to implement the core ideas epoused in BBR congestion 
 This involing keeping track of both bottleneck bandwidth RTT prop and making sure we
 stay under the BDP limits.
 
+Using a window size of 1, we measured average RTT to be about ~54ms.
 
