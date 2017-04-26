@@ -6,10 +6,10 @@ class ExDLHController : public Controller {
 private:
   unsigned int max_window_size_;
   unsigned int min_window_size_;
-  double time_window_;
+  double rtt_estimate_;
   double weight_;
   unsigned int trickle_window_size_;
-  unsigned int ewma_rate_;
+  double ewma_rate_;
   unsigned int outstanding_packets_;
 
 public:
