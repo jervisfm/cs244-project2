@@ -212,8 +212,16 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
       pacing_gain_ = HIGH_GAIN;
     } else {
       switch_to_mode_drain();
+    } 
+  } else if (mode_drain()) {
+    double target_bdp = bandwidth_delay_product();
+    if (inflight_bdp() <= target_bdp) {
+      // Switch to cruise mode aka Probe_BW
+      switch_to_probe_bw();
     }
-    
+  } else if (mode_probe_bw()) {
+    // TODO
+    // Implement gain cycling for Probe BW.
   }
 
   
