@@ -17,6 +17,7 @@ static const int PACKET_SIZE_BYTES = 1472;
 ExDJMController::ExDJMController( const bool debug )
   : Controller::Controller( debug ),
     cwnd_gain_(0.8),
+    pacing_gain_(0.9),
     num_bytes_sent_(0),
     last_sequence_number_acked_(0),
     rtt_samples_(),
