@@ -180,6 +180,11 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);
   debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth: %.1f", sliding_min_rtt(), sliding_max_bandwidth());
 
+
+  // In start up mode, grow the cwnd exponetially.
+  if (mode_startup()) {
+    cwnd_ += 1;
+  }
   
 }
 
