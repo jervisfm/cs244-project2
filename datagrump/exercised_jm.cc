@@ -74,7 +74,38 @@ double ExDJMController::sliding_min_rtt(int num_samples) {
 
 std::vector<double> ExDJMController::delivery_rates() {
   std::vector<double> rates;
-  // TODO: implement.
+  // Loop over all the time -> num data sent samples in order and compute a vectory
+  // of delivery rates so far.
+  int count = 0;
+  std::pair<const int, double> previous_entry;
+  for (const auto& entry : time_to_data_map_) {
+    ++count;
+    if (count == 1) {
+      previous_entry = entry;
+      // We need two entries to compute a rate.
+      continue;
+    }
+
+    // Pull out the needed data pieces from the two entries.
+    int entry_time_sent = entry.first;
+    double entry_data_sent = entry.second;
+
+    int prev_entry_time_sent = previous_entry.first;
+    double prev_entry_data_sent = previous_entry.second;
+
+    // Compute intermediate deltas
+    double delta_time = entry_time_sent - prev_entry_time_sent;
+    double delta_data_sent = entry_data_sent - prev_entry_data_sent;
+
+    // TODO: Remove debug assertion.
+    assert(delta_time > 0);
+
+    // Compute instantenous delivery rate from the deltas.
+    double delivery_rate = delta_data_sent / delta_time;
+    rates.emplace_back(delivery_rate);
+
+    previous_entry = entry;
+  }
   return rates;
 }
 
