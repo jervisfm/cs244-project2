@@ -63,7 +63,7 @@ double ExDJMController::sliding_min_rtt(int num_samples) {
   int count = 0;
   double total = 0;
   for(auto it = rtt_samples_.rbegin(); it != rtt_samples_.rend(); ++it) {
-    if (count > num_samples) {
+    if (count >= num_samples) {
       break;
     }
     double value = *it;
@@ -113,6 +113,21 @@ std::vector<double> ExDJMController::delivery_rates() {
 double ExDJMController::bandwidth_delay_product() {
   // TODO: implement.
   return 1;
+}
+
+double ExDJMController::sliding_max_bandwidth(int num_samples) {
+  std::vector<double> rates = delivery_rates();
+  int count = 1;
+  double current_max = 0;
+  for (auto it = rates.rbegin(); it != rates.rend(); ++it) {
+    if (count > num_samples) {
+      break;
+    }
+    double new_sample = it;
+    current_max = std::max(new_sample, current_max);
+    ++count;
+  }
+  return current_max;
 }
 
 void ExDJMController::test_delivery_rates() { 
