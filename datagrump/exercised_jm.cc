@@ -52,13 +52,11 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
 {
   /* Default: take no action */
 
-  if ( debug_ ) {
-    cerr << "At time " << timestamp_ack_received
-         << " received ack for datagram " << sequence_number_acked
-         << " (send @ time " << send_timestamp_acked
-         << ", received @ time " << recv_timestamp_acked << " by receiver's clock)"
-         << endl;
-  }
+  double rtt_ms = timestamp_ack_received - send_timestamp_acked;
+  debug_printf(INFO, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f",
+               timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
+               recv_timestamp_acked, rtt_ms);
+  
 }
 
 /* How long to wait (in milliseconds) if there are no acks
