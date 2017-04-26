@@ -34,13 +34,10 @@ unsigned int ExDJMController::window_size( void )
 {
   int window_size = 0;
 
-  if (mode_startup()) {
-    window_size = cwnd_;
-  } else {
     // BBR says that the window size should be some fraction of the BDP as modulated
     // by the cwnd gain.
     window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
-  }
+
   
   // BBR recommends always have a min window size of 4 to keep things going smoothly.
   window_size = std::max(4, window_size);
