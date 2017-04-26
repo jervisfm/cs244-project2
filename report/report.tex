@@ -6,7 +6,8 @@
 
 \usepackage{amsmath,amsfonts,graphicx}
 \usepackage[letterpaper, margin=1in]{geometry}
-
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
 % Imports for writing pseudocode
 \usepackage{algorithm}
 \usepackage{listings}
@@ -76,19 +77,6 @@
    \end{center}
    \markboth{Assignment #1: #2}{Assignment #1: #2}
 }
-%
-% Convention for citations is authors' initials followed by the year.
-% For example, to cite a paper by Leighton and Maggs you would type
-% \cite{LM89}, and to cite a paper by Strassen you would type \cite{S69}.
-% (To avoid bibliography problems, for now we redefine the \cite command.)
-% Also commands that create a suitable format for the reference list.
-\renewcommand{\cite}[1]{[#1]}
-\def\beginrefs{\begin{list}%
-        {[\arabic{equation}]}{\usecounter{equation}
-         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
-         \setlength{\labelwidth}{1.6truecm}}}
-\def\endrefs{\end{list}}
-\def\bibentry#1{\item[\hbox{[#1]}]}
 
 %Use this command for a figure; it puts a figure in wherever you want it.
 %usage: \fig{NUMBER}{SPACE-IN-INCHES}{CAPTION}
@@ -340,11 +328,25 @@ the queueing delay. We also found that the best RTT threshold was about 90ms.
   approach, including the important decisions you had to make and how you made
   them. Include illustrative plots.
 \end{question}
+
+\subsection*{Sprout-EWMA-like Estimation}
+In our first approach, we referred to the Sprout-
+EWMA\footnote{\url{http://alfalfa.mit.edu/}}
+
+\subsection*{BBR-like Congestion-based Congestion Control}
+Next, we referred to the
+BBR\footnote{\url{http://dl.acm.org/citation.cfm?id=3022184}}
+congestion-based congestion control algorithm.
+
+\vfill
+\pagebreak
+
 \section*{Exercise E}
 \begin{question}
   Pick a cool name for your scheme!
 \end{question}
-Rocinante
+
+We call our approach \fbox{\texttt{Rocinante}}, named after Don Quixote's noble steed.
 
 % =============================================================================
 \end{document}
