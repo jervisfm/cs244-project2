@@ -50,6 +50,22 @@ private:
 
   // Debugging test functions. Can be removed once we're confident in the implementation.
   void test_delivery_rates();
+
+  inline bool startup() {
+    return bbr_state_ == BBR_STATE::STARTUP;
+  }
+
+  inline bool probe_bw() {
+    return bbr_state_ == BBR_STATE::PROBE_BW;
+  }
+
+  inline bool probe_rtt() {
+    return bbr_state_ == BBR_STATE::PROBE_RTT;
+  }
+
+  inline bool drain() {
+    return bbr_state_ == BBR_STATE::DRAIN;
+  }
   
 public:
     ExDJMController( const bool debug);
