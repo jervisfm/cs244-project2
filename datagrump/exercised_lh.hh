@@ -8,7 +8,6 @@ private:
   unsigned int min_window_size_;
   double rtt_estimate_;
   double weight_;
-  unsigned int trickle_window_size_;
   double ewma_rate_;
   unsigned int outstanding_packets_;
 
