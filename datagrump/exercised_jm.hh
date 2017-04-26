@@ -16,6 +16,13 @@ private:
 
   // Returns the current average rtt
   double average_rtt();
+
+  // Returns the minute rtt about the past number of samples.
+  double sliding_min_rtt(int num_samples=10);
+  
+  // Returns the current estimate for bandwidth delay product. This is a product
+  // sliding_min_rtt() and sliding_max_bandwidth().
+  double bandwidth_delay_product();
   
 public:
     ExDJMController( const bool debug);

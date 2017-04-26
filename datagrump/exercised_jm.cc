@@ -51,6 +51,20 @@ double ExDJMController::average_rtt() {
   return total/count;
 }
 
+double ExDJMController::sliding_min_rtt(int num_samples) {
+  int count = 0;
+  double total = 0;
+  for(auto it = rtt_samples_.rbegin(); it != rtt_samples_.rend(); ++it) {
+    if (count > num_samples) {
+      break;
+    }
+    double value = *it;
+    total += value;
+    ++count;
+  }
+  return total/count;
+}
+
 /* An ack was received */
 void ExDJMController::ack_received( const uint64_t sequence_number_acked,
         /* what sequence number was acknowledged */
@@ -66,9 +80,10 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   double rtt_ms = timestamp_ack_received - send_timestamp_acked;
   rtt_samples_.emplace_back(rtt_ms);
   double average_rtt_ms = average_rtt();
-  debug_printf(INFO, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
+  debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);
+  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f", sliding_min_rtt());
   
   
 }
