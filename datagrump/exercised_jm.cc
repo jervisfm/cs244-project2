@@ -117,9 +117,12 @@ double ExDJMController::bandwidth_delay_product() {
 
 void ExDJMController::test_delivery_rates() { 
   time_to_data_map_ = {{1,10}, {2,20}, {3, 30}, {4,50}, {5,90}};
-  string output;
+  stringstream output;
   // TODO fill in.
-  debug_printf(INFO, "Rates: %s", output);
+  for (const auto& rate : delivery_rates()) {
+    output << rate << ", ";
+  }
+  debug_printf(INFO, "Rates: %s", output.str().c_str());
 }
 
 /* An ack was received */
@@ -144,6 +147,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   num_bytes_sent_ += PACKET_SIZE_BYTES;
   time_to_data_map_.emplace(timestamp_ack_received, num_bytes_sent_);
 
+  test_delivery_rates();
   
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
