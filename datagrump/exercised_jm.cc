@@ -14,6 +14,8 @@ using namespace std;
 // Size of the UDP packets we're sending.
 static const int PACKET_SIZE_BYTES = 1472;
 
+
+
 /* Default constructor */
 ExDJMController::ExDJMController( const bool debug )
   : Controller::Controller( debug ),
@@ -199,9 +201,16 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
 
   // In start up mode, grow the cwnd exponetially.
   if (mode_startup()) {
-    cwnd_gain_ = 2.0 / log(2);
-    pacing_gain_ = 2.0 / log(2);
+    if (delivery_rate_increased()) {
+      cwnd_gain_ = HIGH_GAIN;
+      pacing_gain_ = HIGH_GAIN;
+    } else {
+      switch_to_mode_drain();
+    }
+    
   }
+
+  
   
 }
 

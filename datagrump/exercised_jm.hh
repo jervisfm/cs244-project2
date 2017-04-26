@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 
+static const double HIGH_GAIN = 2.0 / log(2);
+
 // Exercise D controller for Jervis' implementation.
 // Tries to implement a BBR-like congestion controller which estimates
 // RTT prop and Bottleneck Bandwidth to make sure window stays below Bandwidth Delay Product.
@@ -70,6 +72,13 @@ private:
 
   inline bool mode_drain() {
     return bbr_state_ == BBR_STATE::DRAIN;
+  }
+
+  inline void switch_to_mode_drain() {
+    // Switch to drain mode. Keep the original cwnd gain inplace.
+    bbr_state_ = BBR_STATE::DRAIN;
+    pacing_gain_ = 1.0/HIGH_GAIN;
+    cwnd_gain_ = HIGH_GAIN;
   }
   
 public:
