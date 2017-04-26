@@ -60,17 +60,18 @@ double ExDJMController::average_rtt() {
 }
 
 double ExDJMController::sliding_min_rtt(int num_samples) {
-  int count = 0;
-  double total = 0;
+
+  double current_min_rtt = std::numeric_limits<double>::max();
+  int count = 1;
   for(auto it = rtt_samples_.rbegin(); it != rtt_samples_.rend(); ++it) {
     if (count >= num_samples) {
       break;
     }
-    double value = *it;
-    total += value;
+    double new_sample = *it;
+    double current_min_rtt = std::min(new_sample, current_min_rtt);
     ++count;
   }
-  return total/count;
+  return current_min_rtt;
 }
 
 std::vector<double> ExDJMController::delivery_rates() {
