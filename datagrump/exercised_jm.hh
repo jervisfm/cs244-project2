@@ -37,6 +37,9 @@ private:
   // Returns the current estimate for bandwidth delay product. This is a product
   // sliding_min_rtt() and sliding_max_bandwidth().
   double bandwidth_delay_product();
+
+  // Debugging test functions. Can be removed once we're confident in the implementation.
+  void test_delivery_rates();
   
 public:
     ExDJMController( const bool debug);
