@@ -31,10 +31,14 @@ ExDJMController::ExDJMController( const bool debug )
 /* Get current window size, in datagrams */
 unsigned int ExDJMController::window_size( void )
 {
+
+
   // BBR says that the window size should be some fraction of the BDP as modulated
   // by the cwnd gain.
   int window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
 
+  // BBR recommends always have a min window size of 4 to keep things going smoothly.
+  window_size = std::max(4, window_size);
   
   // window_size = 1;
 
