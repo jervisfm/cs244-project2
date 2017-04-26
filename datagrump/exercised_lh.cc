@@ -9,12 +9,11 @@ using namespace std;
 /* Default constructor */
 ExDLHController::ExDLHController( const bool debug )
   : Controller::Controller( debug ),
-    max_window_size_(50),
+    max_window_size_(80),
     min_window_size_(5),
     rtt_estimate_(80.0),
-    weight_(0.6),
-    trickle_window_size_(3),
-    ewma_rate_(0.5), // 1 packet per ewma_rate
+    weight_(0.3),
+    ewma_rate_(2.4), // 1 packet per ewma_rate
     outstanding_packets_(0) {
   cerr << "Exercise D Luke Controller" << endl;
 }
