@@ -16,6 +16,7 @@ static const int PACKET_SIZE_BYTES = 1472;
 /* Default constructor */
 ExDJMController::ExDJMController( const bool debug )
   : Controller::Controller( debug ),
+    bbr_state_(BBR_STATE::STARTUP),
     cwnd_gain_(0.8),
     pacing_gain_(0.9),
     num_bytes_sent_(0),
@@ -34,10 +35,10 @@ unsigned int ExDJMController::window_size( void )
   // by the cwnd gain.
   int window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
 
+  
   // window_size = 1;
 
-
-  debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
+  debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
 
   return window_size;
 }

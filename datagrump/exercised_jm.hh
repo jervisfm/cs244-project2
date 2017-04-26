@@ -9,6 +9,14 @@
 // RTT prop and Bottleneck Bandwidth to make sure window stays below Bandwidth Delay Product.
 class ExDJMController : public Controller {
 private:
+    enum BBR_STATE {
+     STARTUP,
+     DRAIN,
+     PROBE_BW,
+     PROBE_RTT,
+    };
+    // State of bbr algorithm
+    BBR_STATE bbr_state_;
     // Factor to fudge BDP by.
     double cwnd_gain_;
     // Factor to fudge the delay by.
