@@ -161,7 +161,7 @@ bool ExDJMController::delivery_rate_increased() {
   double current_value = rates[rates.size() - 1];
   double prior_value =  rates[rates.size() - 2];
   double change_magnitude = (current_value / prior_value);
-  double change_threshold = 1.25;
+  double change_threshold = 1.20;
   if (change_magnitude >= change_threshold) {
     return true;
   } else {
