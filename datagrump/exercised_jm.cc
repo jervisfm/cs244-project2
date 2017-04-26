@@ -78,7 +78,7 @@ std::vector<double> ExDJMController::delivery_rates() {
   // Loop over all the time -> num data sent samples in order and compute a vectory
   // of delivery rates so far.
   int count = 0;
-  std::pair<const int, double> previous_entry;
+  std::pair<int, double> previous_entry;
   for (const auto& entry : time_to_data_map_) {
     ++count;
     if (count == 1) {
