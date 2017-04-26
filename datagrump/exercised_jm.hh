@@ -28,10 +28,10 @@ private:
   // time order.
   std::vector<double> delivery_rates();
   
-  // Returns the minimum rtt about the past number of samples.
+  // Returns the minimum rtt about the past number of samples. Unit is milliseconds.
   double sliding_min_rtt(int num_samples=10);
 
-  // Returns the maximum bandwidth over the past number of samples
+  // Returns the maximum bandwidth over the past number of samples.
   double sliding_max_bandwidth(int num_samples=10);
   
   // Returns the current estimate for bandwidth delay product. This is a product
