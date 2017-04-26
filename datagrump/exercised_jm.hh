@@ -5,6 +5,8 @@
 #include <map>
 
 // Exercise D controller for Jervis' implementation.
+// Tries to implement a BBR-like congestion controller which estimates
+// RTT prop and Bottleneck Bandwidth to make sure window stays below Bandwidth Delay Product.
 class ExDJMController : public Controller {
 private:
     // Factor to fudge BDP by.
