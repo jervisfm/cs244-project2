@@ -39,6 +39,9 @@ private:
   // This is amount of data sent / time. The rates computed are in
   // time order.
   std::vector<double> delivery_rates();
+
+  // Returns true if we saw substantial gains in delivery rate.
+  bool delivery_rate_increased();
   
   // Returns the minimum rtt about the past number of samples. Unit is milliseconds.
   double sliding_min_rtt(int num_samples=10);

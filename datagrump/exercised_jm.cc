@@ -151,6 +151,24 @@ void ExDJMController::test_delivery_rates() {
   debug_printf(INFO, "Rates: %s", output.str().c_str());
 }
 
+bool ExDJMController::delivery_rate_increased() {
+  std::vector<double> rates = delivery_rates();
+  if (rates.size() <= 1) {
+    // Be optimistic and assume rate is increasing if we don't have enough data.
+    return true;
+  }
+
+  double current_value = rates[rates.size() - 1];
+  double prior_value =  rates[rates.size() - 2];
+  double change_magnitude = (current_value / prior_value);
+  double change_threshold = 1.25;
+  if (change_magnitude >= change_threshold) {
+    return true;
+  } else {
+    return false;
+  }  
+}
+
 /* An ack was received */
 void ExDJMController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t send_timestamp_acked,
@@ -182,7 +200,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   // In start up mode, grow the cwnd exponetially.
   if (mode_startup()) {
     cwnd_gain_ = 2.0 / log(2);
-    pacing_gain_ 2.0 / log(2);
+    pacing_gain_ = 2.0 / log(2);
   }
   
 }
