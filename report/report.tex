@@ -329,9 +329,79 @@ the queueing delay. We also found that the best RTT threshold was about 90ms.
   them. Include illustrative plots.
 \end{question}
 
-\subsection*{Sprout-EWMA-like Estimation}
+\subsection*{EWMA-estimated Receiver Rate}
 In our first approach, we referred to the Sprout-
-EWMA\footnote{\url{http://alfalfa.mit.edu/}}
+EWMA\footnote{\url{http://alfalfa.mit.edu/}} idea of using an exponentially
+weighted moving average to estimate the rate that the receiver was receiving
+datagrams. This served somewhat like an estimate of the bottleneck bandwidth
+capacity and varied over time. We then approximated the RTT to as the minimum
+RTT that was seen during the flow.
+
+Then, our algorithm tried to maintain the bandwidth delay product number of
+packets in flight at any given time as $RTT_{estimate} * BP_{estimate}$ using
+the estimates that were calculated.
+
+While implementing this approach, we found that there were interesting edge
+cases that required us to add minimum and maximum bounds on the window size.
+In particular, if no minimum was set, we found that it was possible for our
+algorithm to reach a state where the estimated bandwidth was a rate of 1 packet
+per RTT, which caused our algorithm to send a single packet at a time in an
+attempt to not bloat the buffers, when really the estimate was incorrect.
+
+This approach used the following parameters:
+\texttt{max\_window\_size}, \texttt{min\_window\_size}, and \texttt{weight}.
+We initialized our estimated RTT to $80$ ms, and our estimated receiver rate to
+1 packet per 2.4 ms (approximately 5Mbps). The weight is used in updating the
+average time between packets received by the receiver as
+$time = (weight * measured_time) + ((1 - weight) * time)$
+where $measured_time$ is the time interval between datagrams received, and the
+rate is calculated as $1$ packet per $time$. This means that a larger weight
+gives more influence to the current measurement than past measurements. On
+our trace, the estimated RTT converges to the minimum RTT of 42ms.
+
+\begin{table}[!h]
+  \centering
+  \caption{Performance of EWMA-estimated Rate \& Min RTT}
+  \label{tab:attempt_1}
+  \scriptsize
+  \begin{tabular}{rrrrrr}
+    \toprule
+    \textbf{max\_window\_size} & \textbf{min\_window\_size} & \textbf{weight} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
+    \midrule
+    100   & 0     & 0.25  & 0.01  & 1027  & 0.01  \\
+    100   & 2     & 0.25  & 0.43  & 103   & 4.17  \\
+    100   & 3     & 0.25  & 2.85  & 199   & 14.32  \\
+    100   & 5     & 0.25  & 3.18  & 213   & 14.93  \\
+    100   & 3     & 0.50  & 4.28  & 370   & 11.57  \\
+    100   & 5     & 0.50  & 4.32  & 362   & 11.93  \\
+    100   & 5     & 0.75  & 4.30  & 667   & 11.93  \\
+    100   & 5     & 0.10  & 1.16  & 112   & 10.36  \\
+    200   & 5     & 0.40  & 3.88  & 1421  & 2.73  \\
+    80    & 5     & 0.30  & 3.69  & 218   & 16.93  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+% TODO: Plot these in a particular color on a figure. At the end have 1 figure
+% showing the dots of all our algorithms
+
+As shown in Table~\ref{tab:attempt_1}, we were unable to break above a power
+score of 20. Note that when \texttt{min\_window\_size} was set to 0, we see
+dismal scores to do our algorithm getting in the undesirable state of sending
+only a single packet at a time as described above. Furthermore, increasing
+this minimum to 2 packets resulted in similar behavior, where 1 packet would be
+sent per RTT/2, and not provide an accurate feedback signal for our estimates.
+Once the minimum window was set to 3 packets, we were able to get better
+feedback, and break out of the negative feedback states that occurred in the
+previous two settings when throughput of the link suddenly dropped
+significantly. However, even with this minimum, our algorithm was slow to
+recover from these larges drops, and would often take 5 or more seconds before
+utilizing the available bandwidth.
+
+Ultimately, the primary flaw of this approach is that if the algorithm reached
+some steady state at a low throughput, and was unable to quickly break out of
+this low-throughput state to utilize the available bandwidth, and when it did
+break out of this state, it often overshot the available bandwidth, causing
+large queuing delays. We worked to address this in our following attempt.
 
 \subsection*{BBR-like Congestion-based Congestion Control}
 Next, we referred to the
