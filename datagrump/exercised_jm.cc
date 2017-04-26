@@ -65,6 +65,11 @@ double ExDJMController::sliding_min_rtt(int num_samples) {
   return total/count;
 }
 
+void double ExDJMController::bandwidth_deplay_product() {
+  // TODO: implement.
+  return 1;
+}
+
 /* An ack was received */
 void ExDJMController::ack_received( const uint64_t sequence_number_acked,
         /* what sequence number was acknowledged */
