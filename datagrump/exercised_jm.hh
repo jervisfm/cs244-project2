@@ -9,6 +9,8 @@ class ExDJMController : public Controller {
 private:
     // Factor to fudge BDP by.
     double cwnd_gain_;
+    // Total number data bytes sent.
+    double num_bytes_sent_;
     // Keeps track of all RTT samples we have seen so far.
     std::vector<double> rtt_samples_;
     // Map of time -> how much data sent at that time.

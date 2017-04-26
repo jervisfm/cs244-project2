@@ -8,10 +8,12 @@
 
 using namespace std;
 
+// Size of the UDP packets we're sending.
+static const int PACKET_SIZE_BYTES = 1472;
 
 /* Default constructor */
 ExDJMController::ExDJMController( const bool debug )
-  : Controller::Controller( debug ), cwnd_gain_(0.8), rtt_samples_(), time_to_data_map_()
+  : Controller::Controller( debug ), cwnd_gain_(0.8), num_bytes_sent_(0), rtt_samples_(), time_to_data_map_()
           
 {
   cerr << "Exercise D Jervis Controller" << endl;
@@ -65,7 +67,7 @@ double ExDJMController::sliding_min_rtt(int num_samples) {
   return total/count;
 }
 
-void double ExDJMController::bandwidth_deplay_product() {
+double ExDJMController::bandwidth_delay_product() {
   // TODO: implement.
   return 1;
 }
