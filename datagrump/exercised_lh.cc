@@ -10,9 +10,9 @@ using namespace std;
 ExDLHController::ExDLHController( const bool debug )
   : Controller::Controller( debug ),
     max_window_size_(50),
-    min_window_size_(3),
+    min_window_size_(5),
     rtt_estimate_(80.0),
-    weight_(0.4),
+    weight_(0.6),
     trickle_window_size_(3),
     ewma_rate_(0.5), // 1 packet per ewma_rate
     outstanding_packets_(0) {
@@ -24,7 +24,7 @@ unsigned int ExDLHController::window_size( void ) {
   // We use the estimated throughput seen at the receiver to estimate the
   // of packets that will leave the network in the next rtt_estimate_ ms.
   unsigned int packets_leaving =
-    max((unsigned int)((rtt_estimate_ / ewma_rate_) + 0.5), min_window_size_);
+    min((unsigned int)((rtt_estimate_ / ewma_rate_) + 0.5), max_window_size_);
 
   // To minimize the packets in the queue, we should send leftover_space
   // such that outstanding_packets_ + leftover_space = packets_leaving.
@@ -34,10 +34,10 @@ unsigned int ExDLHController::window_size( void ) {
     // If there are already too many packets, let them drain.
     return 0;
   }
-  else if (leftover_space > max_window_size_) {
-    // Put a maximum, just in case
-    leftover_space = max_window_size_;
-  }
+  // else if (packets_leaving > max_window_size_) {
+  //   // Put a maximum, just in case
+  //   packets_leaving = max_window_size_;
+  // }
 
   if ( debug_ ) {
     cerr << "At time " << timestamp_ms()
@@ -45,13 +45,13 @@ unsigned int ExDLHController::window_size( void ) {
          << " window size is " << leftover_space << endl;
   }
 
-  // cerr << "Outstanding Packets: " << outstanding_packets_
-  //      << " Packets Leaving: " << packets_leaving
-  //      << " Leftover: " << leftover_space
-  //      << " rtt_estimate: " << rtt_estimate_
-  //      << "\tewma: " << ewma_rate_ << endl;
+  cerr << "Outstanding Packets: " << outstanding_packets_
+       << " Packets Leaving: " << packets_leaving
+       << " Leftover: " << leftover_space
+       << " rtt_estimate: " << rtt_estimate_
+       << "\tewma: " << ewma_rate_ << endl;
 
-  return min(packets_leaving, max_window_size_);
+  return max(packets_leaving, min_window_size_);
   // return leftover_space + outstanding_packets_;
 }
 
@@ -93,14 +93,6 @@ void ExDLHController::ack_received( const uint64_t sequence_number_acked,
 
   // Update the last received timestamp
   last_recv_timestamp = recv_timestamp_acked;
-
-  unsigned int packets_leaving =
-    (unsigned int)((rtt_estimate_ / ewma_rate_) + 0.5);
-
-  cerr << "Outstanding Packets: " << outstanding_packets_
-       << " Packets Leaving: " << packets_leaving
-       << " rtt_estimate: " << rtt_estimate_
-       << "\tewma: " << ewma_rate_ << endl;
 
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
