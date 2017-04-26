@@ -69,7 +69,7 @@ double ExDJMController::sliding_min_rtt(int num_samples) {
       break;
     }
     double new_sample = *it;
-    double current_min_rtt = std::min(new_sample, current_min_rtt);
+    current_min_rtt = std::min(new_sample, current_min_rtt);
     ++count;
   }
   return current_min_rtt;
