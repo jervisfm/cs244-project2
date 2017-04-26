@@ -67,6 +67,12 @@ double ExDJMController::sliding_min_rtt(int num_samples) {
   return total/count;
 }
 
+std::vector<double> ExDJMController::delivery_rates() {
+  std::vector<double> rates;
+  // TODO: implement.
+  return rates;
+}
+
 double ExDJMController::bandwidth_delay_product() {
   // TODO: implement.
   return 1;
