@@ -174,5 +174,8 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExDJMController::timeout_ms( void )
 {
+  // TODO: Implement
+  // This is equivalent to the timer callback delay in the BBR paper.
+  // It's set to: PktSize / (pacing_gain * BtlBw)
   return 1000; /* timeout of one second */
 }
