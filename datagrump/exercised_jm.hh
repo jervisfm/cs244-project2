@@ -1,6 +1,7 @@
 #ifndef EXERCISE_D_JM_CONTROLLER_HH
 #define EXERCISE_D_JM_CONTROLLER_HH
 
+#include <cmath>
 #include <vector>
 #include <map>
 
