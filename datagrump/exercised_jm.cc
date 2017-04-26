@@ -115,7 +115,7 @@ double ExDJMController::bandwidth_delay_product() {
   return 1;
 }
 
-void EXDJMController::test_delivery_rates() {
+void ExDJMController::test_delivery_rates() { 
   time_to_data_map_ = {{1,10}, {2,20}, {3, 30}, {4,50}, {5,90}};
   string output;
   // TODO fill in.
