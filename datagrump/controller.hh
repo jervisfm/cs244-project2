@@ -2,6 +2,8 @@
 #define CONTROLLER_HH
 
 #include <cstdint>
+// Include debug printf here so all controllers get debug functions.
+#include "debug_printf.hh"
 
 /* Congestion controller interface */
 

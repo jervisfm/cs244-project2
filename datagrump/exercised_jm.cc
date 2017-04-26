@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "controller.hh"
 #include "timestamp.hh"
@@ -25,9 +26,9 @@ unsigned int ExDJMController::window_size( void )
     cerr << "At time " << timestamp_ms()
          << " window size is " << the_window_size << endl;
   }
-
   return the_window_size;
 }
+
 
 /* A datagram was sent */
 void ExDJMController::datagram_was_sent(  const uint64_t sequence_number, /* of the sent datagram */
@@ -35,11 +36,8 @@ void ExDJMController::datagram_was_sent(  const uint64_t sequence_number, /* of 
                                         bool on_timeout )
 {
   /* Default: take no action */
+  debug_printf(VERBOSE, "At time %d sent datagram %d. Was timeout?%b", send_timestamp, sequence_number, on_timeout);
 
-  if ( debug_ ) {
-    cerr << "At time " << send_timestamp
-	 << " sent datagram " << sequence_number << "was timeout: " << on_timeout << endl;
-  }
 }
 
 /* An ack was received */
