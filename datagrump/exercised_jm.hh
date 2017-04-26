@@ -20,6 +20,8 @@ private:
     };
     // State of bbr algorithm
     BBR_STATE bbr_state_;
+    // Number of packets outstanding in the network.
+    int inflight_packets_;
     // Value to control cwnd directly in startup mode.
     double cwnd_;
     // Factor to fudge BDP by.

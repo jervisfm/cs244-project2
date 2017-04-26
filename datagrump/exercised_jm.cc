@@ -20,6 +20,7 @@ static const int PACKET_SIZE_BYTES = 1472;
 ExDJMController::ExDJMController( const bool debug )
   : Controller::Controller( debug ),
     bbr_state_(BBR_STATE::STARTUP),
+    inflight_packets_(0),
     cwnd_(1),
     cwnd_gain_(0.8),
     pacing_gain_(0.9),
@@ -60,7 +61,7 @@ void ExDJMController::datagram_was_sent(  const uint64_t sequence_number, /* of 
 {
   /* Default: take no action */
   debug_printf(VERBOSE, "At time %d sent datagram %d. Was timeout?%b", send_timestamp, sequence_number, on_timeout);
-
+  ++inflight_packets_;
 }
 
 double ExDJMController::average_rtt() {
@@ -178,6 +179,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t timestamp_ack_received )
 {
   /* Default: take no action */
+  --inflight_packets_;
 
   // Gather data for RTT estimates.
   double rtt_ms = timestamp_ack_received - send_timestamp_acked;
