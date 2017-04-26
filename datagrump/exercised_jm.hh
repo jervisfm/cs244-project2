@@ -20,8 +20,9 @@ private:
   double average_rtt();
 
   // Computes the delivery rate from the collected time_to_data_map_;
-  // This is amount of data sent / time.
-  std::vector<double> delivery_rate();
+  // This is amount of data sent / time. The rates computed are in
+  // time order.
+  std::vector<double> delivery_rates();
   
   // Returns the minimum rtt about the past number of samples.
   double sliding_min_rtt(int num_samples=10);
