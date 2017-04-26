@@ -1,8 +1,19 @@
 #ifndef EXERCISE_D_JM_CONTROLLER_HH
 #define EXERCISE_D_JM_CONTROLLER_HH
 
+#include <vector>
+#include <map>
+
 // Exercise D controller for Jervis' implementation.
 class ExDJMController : public Controller {
+private:
+    // Factor to fudge BDP by.
+    double cwnd_gain_;
+    // Keeps track of all RTT samples we have seen so far.
+    std::vector<double> rtt_samples_;
+    // Map of time -> how much data sent at that time.
+    std::map<int, double> time_to_data_map_;
+
 public:
     ExDJMController( const bool debug);
 
