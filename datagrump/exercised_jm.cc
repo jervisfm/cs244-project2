@@ -206,7 +206,9 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
 
 
   // In start up mode, grow the cwnd exponetially.
+  debug_printf(INFO, "Mode: %d", bbr_state_);
   if (mode_startup()) {
+    debug_printf(INFO, "Start up mode");
     if (delivery_rate_increased()) {
       cwnd_gain_ = HIGH_GAIN;
       pacing_gain_ = HIGH_GAIN;
@@ -214,6 +216,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
       switch_to_mode_drain();
     } 
   } else if (mode_drain()) {
+    debug_printf(INFO, "Drain mode");
     double target_bdp = bandwidth_delay_product();
     if (inflight_bdp() <= target_bdp) {
       // Switch to cruise mode aka Probe_BW
@@ -222,6 +225,8 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   } else if (mode_probe_bw()) {
     // TODO
     // Implement gain cycling for Probe BW.
+    debug_printf(INFO, "Probe BW  mode");
+
   }
 
   
