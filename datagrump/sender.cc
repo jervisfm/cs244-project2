@@ -68,6 +68,7 @@ DatagrumpSender::DatagrumpSender( const char * const host,
     sequence_number_( 0 ),
     next_ack_expected_( 0 )
 {
+  cerr << "Connecting to host: " << host << endl;
   // Pick one of the available controllers for testing.
   // controller_.reset(new DefaultController(debug));
   //controller_.reset(new ExAController(debug));
