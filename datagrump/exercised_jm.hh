@@ -87,6 +87,12 @@ private:
     pacing_gain_ = 1.0/HIGH_GAIN;
     cwnd_gain_ = HIGH_GAIN;
   }
+
+  inline void switch_to_mode_probe_bw() {
+    bbr_state_ = BBR_STATE::PROBE_BW;
+    pacing_gain_ = 1.0;
+    cwnd_gain_ = 2;
+  }
   
 public:
     ExDJMController( const bool debug);
