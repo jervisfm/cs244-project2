@@ -35,11 +35,9 @@ unsigned int ExDJMController::window_size( void )
   int window_size = std::max(bandwidth_delay_product() * cwnd_gain_, 1.0);
 
   // window_size = 1;
-  
-  if ( debug_ ) {
-    cerr << "At time " << timestamp_ms()
-         << " window size is " << window_size << endl;
-  }
+
+
+  debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
   return window_size;
 }
