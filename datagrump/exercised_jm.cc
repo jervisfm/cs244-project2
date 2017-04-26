@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 /* Default constructor */
 ExDJMController::ExDJMController( const bool debug )
   : Controller::Controller( debug ), cwnd_gain_(0.8), rtt_samples_(), time_to_data_map_()

@@ -37,4 +37,11 @@ $ runcontest
 ```
 
 
+# Custom Congestion Control
+## BBR
+
+For exercise D, we'll try to implement the core ideas epoused in BBR congestion control.
+This involing keeping track of both bottleneck bandwidth RTT prop and making sure we
+stay under the BDP limits.
+
 
