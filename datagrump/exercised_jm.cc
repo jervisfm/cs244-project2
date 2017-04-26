@@ -168,8 +168,8 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);
-  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f", sliding_min_rtt());
-  debug_printf(INFO, "Sliding Window Max Bandwidth: %.1f", sliding_max_bandwidth());
+  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth: %.1f", sliding_min_rtt(), sliding_max_bandwidth());
+
   
 }
 
@@ -181,6 +181,6 @@ unsigned int ExDJMController::timeout_ms( void )
   // It's set to: PktSize / (pacing_gain * BtlBw)
   int timeout = PACKET_SIZE_BYTES / (pacing_gain_ * sliding_max_bandwidth());
   timeout = std::max(timeout, 1);
-  debug_printf(INFO, "Waiting for timeout (ms): %d", timeout);
+  debug_printf(VERBOSE, "Waiting for timeout (ms): %d", timeout);
   return timeout;
 }
