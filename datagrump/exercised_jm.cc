@@ -222,6 +222,9 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
     if (inflight_bdp() <= target_bdp) {
       // Switch to cruise mode aka Probe_BW
       switch_to_mode_probe_bw();
+    } else {
+      debug_printf(INFO, "inflight pkts: %d target_bdp(bytes): %.f inflight_bdp: %.f DIFF: %.f",
+                   inflight_packets_, target_bdp, inflight_bdp(), (inflight_bdp() - target_bdp)); 
     }
   } else if (mode_probe_bw()) {
     // TODO
