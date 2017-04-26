@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
+#include <limits>
 
 #include "controller.hh"
 #include "timestamp.hh"
@@ -124,7 +125,7 @@ double ExDJMController::sliding_max_bandwidth(int num_samples) {
     if (count > num_samples) {
       break;
     }
-    double new_sample = it;
+    double new_sample = *it;
     current_max = std::max(new_sample, current_max);
     ++count;
   }
