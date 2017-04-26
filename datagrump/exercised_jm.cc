@@ -113,8 +113,7 @@ std::vector<double> ExDJMController::delivery_rates() {
 }
 
 double ExDJMController::bandwidth_delay_product() {
-  // TODO: implement.
-  return 1;
+  return sliding_min_rtt() * sliding_max_bandwidth();
 }
 
 double ExDJMController::sliding_max_bandwidth(int num_samples) {
