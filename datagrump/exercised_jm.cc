@@ -72,13 +72,9 @@ void double ExDJMController::bandwidth_deplay_product() {
 
 /* An ack was received */
 void ExDJMController::ack_received( const uint64_t sequence_number_acked,
-        /* what sequence number was acknowledged */
                                   const uint64_t send_timestamp_acked,
-        /* when the acknowledged datagram was sent (sender's clock) */
                                   const uint64_t recv_timestamp_acked,
-        /* when the acknowledged datagram was received (receiver's clock)*/
                                   const uint64_t timestamp_ack_received )
-/* when the ack was received (by sender) */
 {
   /* Default: take no action */
 
