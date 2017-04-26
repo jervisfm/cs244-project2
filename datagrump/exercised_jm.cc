@@ -178,7 +178,6 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t recv_timestamp_acked,
                                   const uint64_t timestamp_ack_received )
 {
-  /* Default: take no action */
   --inflight_packets_;
 
   // Gather data for RTT estimates.
