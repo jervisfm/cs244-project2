@@ -2,6 +2,7 @@
 #include <sstream>
 #include <cassert>
 #include <limits>
+#include <cmath>
 
 #include "controller.hh"
 #include "timestamp.hh"
@@ -180,7 +181,7 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
 
   // In start up mode, grow the cwnd exponetially.
   if (mode_startup()) {
-    cwnd_ += 1;
+    cwnd_gain_ = 2.0 / log(2);
   }
   
 }
