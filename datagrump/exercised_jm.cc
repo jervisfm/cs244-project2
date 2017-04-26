@@ -95,6 +95,16 @@ void ExDJMController::ack_received( const uint64_t sequence_number_acked,
   double rtt_ms = timestamp_ack_received - send_timestamp_acked;
   rtt_samples_.emplace_back(rtt_ms);
   double average_rtt_ms = average_rtt();
+
+  // Update stats for delivery rate.
+  // TODO: Do we need to worry about out of order UDP packet delivery ? 
+  if (sequence_number_acked > last_sequence_number_acked_) {
+    // Got a new data point.
+    last_sequence_number_acked_ = sequence_number_acked;
+  }
+  num_bytes_sent_ += PACKET_SIZE_BYTES;
+  time_to_data_map_.emplace(timestamp_ack_received, num_bytes_sent_);
+
   
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
