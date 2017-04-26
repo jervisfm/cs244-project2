@@ -172,6 +172,11 @@ bool ExDJMController::delivery_rate_increased() {
   }  
 }
 
+double ExDJMController::inflight_bdp() {
+  double result = (PACKET_SIZE_BYTES / sliding_min_rtt()) * inflight_packets_;
+  return result;
+}
+
 /* An ack was received */
 void ExDJMController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t send_timestamp_acked,

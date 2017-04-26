@@ -58,6 +58,10 @@ private:
   // sliding_min_rtt() and sliding_max_bandwidth().
   double bandwidth_delay_product();
 
+  // Computes the (estimated) inflight bandwidth delay product. Useful to know when
+  // to swutch to PROBE_BW mode.
+  double inflight_bdp() ;
+  
   // Debugging test functions. Can be removed once we're confident in the implementation.
   void test_delivery_rates();
 
