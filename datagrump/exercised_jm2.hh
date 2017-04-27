@@ -61,6 +61,23 @@ private:
     return num_bytes_sent_ / (1024 * 1024);
   }
 
+  // BDP (nummber of bytes allowed to be outstanding on the network given current conditions
+  // (RTT, BtlBw) in terms of outstanding packets.
+  int bdp_packets();
+
+  
+  // BDP (nummber of bytes allowed to be outstanding on the network given current conditions
+  // (RTT, BtlBw) in kilobytes.
+  double bdp_kb() {
+    return bandwidth_delay_product() / 1024.0;
+  }
+
+  // BDP (nummber of bytes allowed to be outstanding on the network given current conditions
+  // (RTT, BtlBw) in megabytes.
+  double bdp_mb() {
+    return bandwidth_delay_product() / (1024 * 1024) ;
+  }
+
   
   // Debugging test functions. Can be removed once we're confident in the implementation.
   void test_delivery_rates();

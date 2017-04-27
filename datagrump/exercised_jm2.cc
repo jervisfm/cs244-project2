@@ -31,18 +31,23 @@ ExDJM2Controller::ExDJM2Controller( const bool debug )
   cerr << "Exercise D Jervis Custon (NonBBR) Controller" << endl;
 }
 
+int ExDJM2Controller::bdp_packets() {
+  double bdp_outstanding_bytes = bandwidth_delay_product();
+  double bdp_outstanding_packets = bdp_outstanding_bytes / PACKET_SIZE_BYTES;
+  return bdp_outstanding_packets;
+}
+
 /* Get current window size, in datagrams */
 unsigned int ExDJM2Controller::window_size( void )
 {
   int window_size = 0;
 
   // Try to Cap windows size to not grow beyond BDP.
-  double bdp_outstanding_bytes = bandwidth_delay_product() * cwnd_gain_;
-  double bdp_outstanding_packets = bdp_outstanding_bytes / PACKET_SIZE_BYTES;
-  window_size = std::min(window_size, bdp_outstatnding_packets);
+  int bdp_outstanding_packets = bdp_packets();
+  window_size = bdp_outstanding_packets;
 
   // Try to have a min window size of 4 to always keep things on the move.
-  window_size = std::max(4, cwnd_);
+  window_size = std::max(4.0, cwnd_);
 
    //  debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
