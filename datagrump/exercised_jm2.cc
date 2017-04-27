@@ -36,17 +36,15 @@ unsigned int ExDJM2Controller::window_size( void )
 {
   int window_size = 0;
 
-    // BBR says that the window size should be some fraction of the BDP as modulated
-    // by the cwnd gain.
-    window_size = bandwidth_delay_product() * cwnd_gain_;
+  // Try to Cap windows size to not grow beyond BDP.
+  double bdp_outstanding_bytes = bandwidth_delay_product() * cwnd_gain_;
+  double bdp_outstanding_packets = bdp_outstanding_bytes / PACKET_SIZE_BYTES;
+  window_size = std::min(window_size, bdp_outstatnding_packets);
 
-  
-  // BBR recommends always have a min window size of 4 to keep things going smoothly.
-  window_size = std::max(4, window_size);
-  
-  // window_size = 1;
+  // Try to have a min window size of 4 to always keep things on the move.
+  window_size = std::max(4, cwnd_);
 
-  //  debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
+   //  debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
   return window_size;
