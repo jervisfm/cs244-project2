@@ -349,7 +349,7 @@ per RTT, which caused our algorithm to send a single packet at a time in an
 attempt to not bloat the buffers, when really the estimate was incorrect.
 
 This approach used the following parameters:
-\texttt{max\_window\_size}, \texttt{min\_window\_size}, and \texttt{weight}.
+\texttt{max\_window}, \texttt{min\_window}, and \texttt{weight}.
 We initialized our estimated RTT to $80$ ms, and our estimated receiver rate to
 1 packet per 2.4 ms (approximately 5Mbps). The weight is used in updating the
 average time between packets received by the receiver as
@@ -366,7 +366,7 @@ our trace, the estimated RTT converges to the minimum RTT of 42ms.
   \scriptsize
   \begin{tabular}{rrrrrr}
     \toprule
-    \textbf{max\_window\_size} & \textbf{min\_window\_size} & \textbf{weight} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
+    \textbf{max\_window} & \textbf{min\_window} & \textbf{weight} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score}\\
     \midrule
     100   & 0     & 0.25  & 0.01  & 1027  & 0.01  \\
     100   & 2     & 0.25  & 0.43  & 103   & 4.17  \\
@@ -385,11 +385,11 @@ our trace, the estimated RTT converges to the minimum RTT of 42ms.
 % showing the dots of all our algorithms
 
 As shown in Table~\ref{tab:attempt_1}, we were unable to break above a power
-score of 20. Note that when \texttt{min\_window\_size} was set to 0, we see
+score of 20. Note that when \texttt{min\_window} was set to 0, we see
 dismal scores to do our algorithm getting in the undesirable state of sending
 only a single packet at a time as described above. Furthermore, increasing
 this minimum to 2 packets resulted in similar behavior, where 1 packet would be
-sent per RTT/2, and not provide an accurate feedback signal for our estimates.
+sent per $RTT/2$, and not provide an accurate feedback signal for our estimates.
 Once the minimum window was set to 3 packets, we were able to get better
 feedback, and break out of the negative feedback states that occurred in the
 previous two settings when throughput of the link suddenly dropped
@@ -404,13 +404,29 @@ break out of this state, it often overshot the available bandwidth, causing
 large queuing delays. We worked to address this in our following attempt.
 
 \subsection*{Delay-Based Additive Increase, Additive Decrease}
-Next, we referred to the
-BBR\footnote{\url{http://dl.acm.org/citation.cfm?id=3022184}}
-congestion-based congestion control algorithm.
+
+After our first attempt, we decided build off of the delay-based algorithm from
+Exercise C. Specifically we built on the idea of using an additive-increase
+and additive decrease. However, unlike the previous.
 
 One limitation is that our algorithm assumes that the round trip propagation
 delay does not change over the course of the trace. Our algorithm would not
 be able to adjust to changes in propagation delay.
+%
+\begin{table}[h]
+  \centering
+  \caption{Performance of Rocinante (Delay-based AIAD)}
+  \label{tab:rocinante}
+  \scriptsize
+  \begin{tabular}{rrrrrrrr}
+    \toprule
+    \textbf{alpha} & \textbf{beta} & \textbf{rtt\_allowance} & \textbf{ewma\_weight} & \textbf{timeout} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score} \\
+    \midrule
+    X  & X & X   & X & X    & X     & X & X \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 
 \vfill
 \pagebreak
