@@ -191,13 +191,13 @@ $throughput / delay$, and the best score is shown in bold.
 \end{table}
 
 These values are plotted as a 2D graph of throughput vs 95-percentile signal
-delay in Figure~\ref{fig:throughput_delay}.
+delay in Figure~\ref{fig:exa}.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[height=3cm]{./img/exa_throughput_delay.pdf}
+  \includegraphics[height=3cm]{./img/exa_fig.pdf}
   \caption{Throughput vs 95-percentile Signal Delay for varying fixed window size.}
-  \label{fig:throughput_delay}
+  \label{fig:exa}
 \end{figure}
 
 To answer the questions, we found that the best score was at a fixed window
@@ -266,6 +266,14 @@ However, even in this best case, only about half of the available throughput was
 utilized. Even with the best constant values we found (shown in bold in the
 table) are not optimal.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=3cm]{./img/exb_fig.pdf}
+  \caption{Throughput vs 95-percentile Signal Delay for simple AIMD.}
+  \label{fig:exb}
+\end{figure}
+
+
 \vfill
 \pagebreak
 
@@ -319,11 +327,19 @@ to quickly allow the queues to drain when a particular RTT is exceeded to reduce
 the queueing delay. We also found that the best RTT threshold was about 90ms,
 when combined with our selection of alpha and beta.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=3cm]{./img/exc_fig.pdf}
+  \caption{Throughput vs 95-percentile Signal Delay for simple AIMD.}
+  \label{fig:exc}
+\end{figure}
+
+
 This approach produced the best score of any of our attempts thus far.
 We believe that even a simple-delay based algorithm was able to outperform
 AIMD or a fixed window scheme due to it's ability to react to congestion in the
 network (by observing RTTs of individual datagrams). In the fixed window scheme,
-no ajudstments were made for congestion, and in the AIMD scheme of the previous
+no adjustments were made for congestion, and in the AIMD scheme of the previous
 exercise, the algorithm only reacted to timeouts (since our mahimahi
 environment does not drop datagrams). Consequently, AIMD would still cause
 bufferbloat during additive increase, and had to wait for timeouts to stop its
