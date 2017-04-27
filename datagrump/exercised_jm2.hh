@@ -44,6 +44,25 @@ private:
 
   // Returns the maximum bandwidth over the past number of samples. Unit is bytes/msec
   double sliding_max_bandwidth(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES);
+
+  // Returns the maximum bandwidth over the past number of samples. Unit is kbytes/sec
+  inline double sliding_max_bandwidth_kBs(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES) {
+    double bw_bytes_per_msec = sliding_max_bandwidth(num_samples);
+    // Convert 1 bytes/msec -> 1 byte/sec
+    double bw_bytes_per_sec = bw_bytes_per_msec / 0.001;
+
+    // Convert 1 byte/sec -> 1kb/sec
+    double bw_kilobytes_per_sec = bw_bytes_per_sec / 1024;
+
+    return bw_kilobytes_per_sec;
+  }
+
+  // Returns the maximum bandwidth over the past number of samples. Unit is kbits/sec
+  inline double sliding_max_bandwidth_kbs(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES) {
+    // Convert kBytes -> kiloBits
+    return sliding_max_bandwidth_kBs(num_samples) * 8;
+  }
+
   
   // Returns the current estimate for bandwidth delay product. This is a product
   // sliding_min_rtt() and sliding_max_bandwidth().
