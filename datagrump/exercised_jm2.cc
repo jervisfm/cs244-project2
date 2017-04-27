@@ -40,7 +40,7 @@ int ExDJM2Controller::bdp_packets() {
   return bdp_outstanding_packets;
 }
 
-double ExDJM2Controller::rtt_min_intial_estimate() {
+double ExDJM2Controller::rtt_min_initial_estimate() {
   if (rtt_samples_.empty()) {
     // Use a sensible default guess.
     return 40;
@@ -60,9 +60,14 @@ unsigned int ExDJM2Controller::window_size( void )
 
   window_size = cwnd_;
 
+  // Keep window size at least 1 to keep things moving.
+  window_size = std::max(cwnd_, 1.0);
+  
   //debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
+
+  
   return window_size;
   //return 100;
 }
@@ -234,13 +239,14 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
     cwnd_ += 1;
   } else if (sequence_number_acked > 0)  {
     // Increase cwnd so long as RTT not spiking up and bandwidth increased.
-
     if (rtt_change_percent < 3) {
         debug_printf(INFO, "RTT still stable, growing window size.");
-        cwnd_ += 1;
+        //cwnd_ += 1/rtt_min_initial_estimate();
+        cwnd_ += .3;
     } else {
       // RTT change increased abruptly, pull back cwnd
       if (did_increase_cwnd_) {
+        debug_printf(WARN, "RTT jumped too much, pulling back cwnd.");
         cwnd_ /= 2;
       }
     }
