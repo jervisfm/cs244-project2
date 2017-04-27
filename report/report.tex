@@ -154,7 +154,7 @@
   same window size over multiple runs?
 \end{question}
 
-We tried several different windows sizes in increments of 5 packets. The raw
+We tried several different windows sizes in increments of 5 datagrams. The raw
 numbers are shown in Table~\ref{tab:fixed_window}. Score is calculated as
 $throughput / delay$, and the best score is shown in bold.
 
@@ -200,7 +200,7 @@ delay in Figure~\ref{fig:throughput_delay}.
 \end{figure}
 
 To answer the questions, we found that the best score was at a fixed window
-size of about 15 packets. The measurements taken with the same window size
+size of about 15 datagrams. The measurements taken with the same window size
 over multiple runs were very repeatable, in the mahimahi environment. The
 throughput and delays only varied slightly (i.e. $\pm$ a few hundredths of Mbps
 or a few ms).
@@ -277,7 +277,7 @@ table) are not optimal.
 
 We implemented a simple scheme that increases or decreases the window size
 based on an RTT threshold. On each ACK, we calculate the RTT of the particular
-packet and additively increase the window if the RTT is less than the threshold,
+datagram and additively increase the window if the RTT is less than the threshold,
 or additively decrease the window size if the measured RTT is
 greater than the threshold.
 The amount of increase and decrease are defined by the constant \texttt{alpha} and \texttt{beta}, respectively.
@@ -338,24 +338,24 @@ capacity and varied over time. We then approximated the RTT to as the minimum
 RTT that was seen during the flow.
 
 Then, our algorithm tried to maintain the bandwidth delay product number of
-packets in flight at any given time as $RTT_{estimate} * BP_{estimate}$ using
+datagrams in flight at any given time as $RTT_{estimate} * BP_{estimate}$ using
 the estimates that were calculated.
 
 While implementing this approach, we found that there were interesting edge
 cases that required us to add minimum and maximum bounds on the window size.
 In particular, if no minimum was set, we found that it was possible for our
-algorithm to reach a state where the estimated bandwidth was a rate of 1 packet
-per RTT, which caused our algorithm to send a single packet at a time in an
+algorithm to reach a state where the estimated bandwidth was a rate of 1 datagram
+per RTT, which caused our algorithm to send a single datagram at a time in an
 attempt to not bloat the buffers, when really the estimate was incorrect.
 
 This approach used the following parameters:
 \texttt{max\_window}, \texttt{min\_window}, and \texttt{weight}.
 We initialized our estimated RTT to $80$ ms, and our estimated receiver rate to
-1 packet per 2.4 ms (approximately 5Mbps). The weight is used in updating the
-average time between packets received by the receiver as
+1 datagram per 2.4 ms (approximately 5Mbps). The weight is used in updating the
+average time between datagrams received by the receiver as
 $time = (weight * measured_time) + ((1 - weight) * time)$
 where $measured_time$ is the time interval between datagrams received, and the
-rate is calculated as $1$ packet per $time$. This means that a larger weight
+rate is calculated as $1$ datagram per $time$. This means that a larger weight
 gives more influence to the current measurement than past measurements. On
 our trace, the estimated RTT converges to the minimum RTT of 42ms.
 
@@ -387,10 +387,10 @@ our trace, the estimated RTT converges to the minimum RTT of 42ms.
 As shown in Table~\ref{tab:attempt_1}, we were unable to break above a power
 score of 20. Note that when \texttt{min\_window} was set to 0, we see
 dismal scores to do our algorithm getting in the undesirable state of sending
-only a single packet at a time as described above. Furthermore, increasing
-this minimum to 2 packets resulted in similar behavior, where 1 packet would be
+only a single datagram at a time as described above. Furthermore, increasing
+this minimum to 2 datagrams resulted in similar behavior, where 1 datagram would be
 sent per $RTT/2$, and not provide an accurate feedback signal for our estimates.
-Once the minimum window was set to 3 packets, we were able to get better
+Once the minimum window was set to 3 datagrams, we were able to get better
 feedback, and break out of the negative feedback states that occurred in the
 previous two settings when throughput of the link suddenly dropped
 significantly. However, even with this minimum, our algorithm was slow to
@@ -408,13 +408,44 @@ large queuing delays. We worked to address this in our following attempt.
 After our first attempt, we decided build off of the delay-based algorithm from
 Exercise C. Specifically we built on the idea of using an additive-increase
 and additive decrease. However, unlike the previous attempt, which used a
-naive RTT threshold, we now use feedback from the acknowledge packets to set
+naive RTT threshold, we now use feedback from the acknowledged datagrams to set
 this threshold.
 
-One limitation is that our algorithm assumes that the round trip propagation
-delay does not change over the course of the trace. Our algorithm would not
-be able to adjust to changes in propagation delay.
-%
+In this algorithm, we use an additive increase (controlled by \texttt{alpha})
+and an additive decrease (controlled by \texttt{beta}). At all times, the
+algorithm is either increasing cwnd or decreasing it, based on an
+exponentially weighted moving average of the RTTs seen, and the current RTT
+of a particular datagram. At a high level, when the RTTs being seen are
+``stable'', or within a specified range of the average RTT, the congestion
+window is additively increased. However, when a RTT is reported that exceeds
+this allowance around the average RTT, it signals congestion, and the algorithm
+decreases the congestion window to avoid bloating the bottleneck queues.
+When the network is congested, the exponentially weighted moving average is
+also reset to the estimated round trip propagation time, which serves as a
+baseline of the expected RTT in an non-congested network.
+
+Several observations motivated the design of this algorithm. First, we learned
+from Exercise A, B, and C, that in general, an algorithm that reacts to delay
+rather than datagram loss or timeout is able to respond to congestion much more
+quickly, and is able to keep the queues relatively small.
+Second, from our first attempt, we realized that our algorithm must be able
+to avoid getting stuck in an undesirable stable state. In our case, we saw
+that having two simple states (increasing or decreasing) was an intuitive way
+ensure that the algorithm was responsive. This was just a choice we made for
+simplicity, other algorithms like BBR use more complex states (e.g. ProbeBW) to
+ensure that the available throughput is utilized.
+
+With this general design of our algorithm in place, we moved on to testing the
+performance of our various parameters: (1) \texttt{alpha}, which defines the
+amount of additive increase to apply to cwnd; (2) \texttt{beta}, which defines
+the amount of additive decrease for cwnd; (3) \texttt{rtt\_allowance}, which
+defines how much a RTT measurement is allowed to exceed the average RTT while
+still being considered ``stable''; (4) \texttt{ewma\_weight}, which defined
+the weight applied to the current measurement of RTT in the EWMA of RTT; and
+\texttt{timeout}, which defined the RTO in milliseconds before another datagram
+is sent. The some of the results of our exploration are shown in
+Table~\ref{tab:rocinante}.
+
 \begin{table}[h]
   \centering
   \caption{Performance of Rocinante (Delay-based AIAD)}
@@ -429,6 +460,25 @@ be able to adjust to changes in propagation delay.
   \end{tabular}
 \end{table}
 
+We found that tuning the first four parameters resulted in a score of slightly
+less than 30, but we were unable to exceed this. Unexpectedly, lowering the
+timeout value significantly improved our score. We suspect that this is due to
+our initial misunderstanding of ``signal delay''. We had previously assumed
+that we were trying to minimize the delay of individual datagrams. However,
+``signal delay'' is also negatively affected by dead time, when no datagrams
+are being sent. By lowering timeout, we ensure that there is a minimum trickle
+of datagrams being sent, as a rate that is low enough to not negatively bloat
+buffers, but frequently enough to ensure that our signal delay is not affected
+by seconds of dead time.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=7cm]{./img/total.pdf}
+  \caption{Throughput vs 95-percentile Signal Delay for all Exercises.
+  We found that delay-based schemes produced the highest score and improved
+  on our algorithm from Exercise C for Exercise D.}
+  \label{fig:all_attempts}
+\end{figure}
 
 \vfill
 \pagebreak
