@@ -10,6 +10,11 @@ static const double HIGH_GAIN = 2.0 / log(2);
 // Exercise D controller for Jervis' implementation.
 // Tries to implement a BBR-like congestion controller which estimates
 // RTT prop and Bottleneck Bandwidth to make sure window stays below Bandwidth Delay Product.
+// Note(jmuindi): Ran out of time to implement BBR. The key control in BBR is {pacing_gain} and
+// that requires a notion of timing that does not exist in the "sourdough" framework so we'd have
+// to add it (e.g. have a "should_send_packet()" method that determine whether a packet should be
+// sent and manually keep track of time.). Alas, time is not our friend, so punting towards
+// exploring more ACK-based congestion control schemes.
 class ExDJMController : public Controller {
 private:
     enum BBR_STATE {
