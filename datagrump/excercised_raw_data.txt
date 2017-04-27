@@ -1102,3 +1102,26 @@ For analysis, please visit:
 
    http://cs344g.keithw.org/report?Rocinante-1493305439-udohding
 
++ TEAM_NAME=Rocinante
++ ./run-contest Rocinante
+Listening on :::9090
+Connecting to host: 100.64.0.1
+
+==============================
+Exercise D.  alpha=2 beta=4.9 rtt_allowance=1.4 emwa_weight=0.005 timeout=25
+Sending to 100.64.0.1:9090
+terminate called after throwing an instance of 'unix_error'
+  what():  send: Invalid argument
+
+Average capacity: 5.04 Mbits/s
+Average throughput: 3.30 Mbits/s (65.5% utilization)
+95th percentile per-packet queueing delay: 40 ms
+95th percentile signal delay: 79 ms
+
+Uploading data to server... done.
+
+Upload successful (1891741 bytes).
+For analysis, please visit:
+
+   http://cs344g.keithw.org/report?Rocinante-1493305616-geiquaic
+
