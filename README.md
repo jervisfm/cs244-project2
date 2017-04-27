@@ -46,3 +46,7 @@ stay under the BDP limits.
 
 Using a window size of 1, we measured average RTT to be about ~54ms.
 
+We gave up on this approach because we run out of time to implement it within the sourdough fragment.
+
+
+
