@@ -223,7 +223,9 @@ In our mahimahi environment, there is no loss, and there are unbounded queues.
 Thus, to signal when a multiplicative decrease should occur, we use a fixed
 timeout value as a signal. We set the timeout to 80ms, which is approximately
 the 95-percentile signal delay on the top algorithms from the leaderboard.
-We also set the initial congestion window size to 10.
+We also set the initial congestion window size to 10 based on experimental
+results from part A and to apply window size enhancements as proposed in RFC
+6928.
 
 We tried a few of different values for \texttt{alpha} and \texttt{beta},
 and recorded their performance in Table~\ref{tab:aimd}.
