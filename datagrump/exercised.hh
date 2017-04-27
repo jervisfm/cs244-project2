@@ -1,6 +1,10 @@
 #ifndef EXERCISE_D_CONTROLLER_HH
 #define EXERCISE_D_CONTROLLER_HH
 
+#include <cmath>
+#include <vector>
+#include <limits>
+
 class ExDController : public Controller {
 
 private:
@@ -12,6 +16,10 @@ private:
     double rtt_allowance_;
     double rtt_min_;
     double ewma_weight_;
+    std::vector<double> rtt_samples_;
+
+    // Returns the minimum rtt about the past number of samples. Unit is milliseconds.
+    double sliding_min_rtt(int num_samples=10);
 public:
     ExDController( const bool debug);
 

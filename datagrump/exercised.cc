@@ -15,8 +15,23 @@ ExDController::ExDController( const bool debug )
     rtt_average_(50),
     rtt_allowance_(1.4),
     rtt_min_(80.0),
-    ewma_weight_(0.01) {
+    ewma_weight_(0.01),
+    rtt_samples_() {
   cerr << "Exercise C" << endl;
+}
+
+double ExDController::sliding_min_rtt(int num_samples) {
+  double current_min_rtt = std::numeric_limits<double>::max();
+  int count = 1;
+  for(auto it = rtt_samples_.rbegin(); it != rtt_samples_.rend(); ++it) {
+    if (count >= num_samples) {
+      break;
+    }
+    double new_sample = *it;
+    current_min_rtt = std::min(new_sample, current_min_rtt);
+    ++count;
+  }
+  return current_min_rtt;
 }
 
 /* Get current window size, in datagrams */
@@ -48,9 +63,9 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t timestamp_ack_received ) {
   // Calculate the RTT of the packet we just received
   double rtt_delay_ms = timestamp_ack_received - send_timestamp_acked;
-
+  rtt_samples_.emplace_back(rtt_delay_ms);
   // Track the minimum RTT to use as a reference for RT_prop
-  rtt_min_ = min(rtt_min_, rtt_delay_ms);
+  rtt_min_ = sliding_min_rtt(1000);
 
   // Keep an EWMA of the rtt seen so far.
   rtt_average_ = ewma_weight_ * rtt_delay_ms +
@@ -61,9 +76,9 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   if (rtt_delay_ms > (rtt_allowance_ *  rtt_average_)) {
     cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
     rtt_average_ = rtt_min_; // reset RTT
-    if (debug_) {
+    if (true) {
       cerr << "      --- cwnd_:\t" << cwnd_
-           << "\trtt_thresh_ms:\t" << rtt_average_
+           << "\trtt_average_:\t" << rtt_average_
            << "\trtt:\t" << rtt_delay_ms << endl;
     }
   }
@@ -71,9 +86,9 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   // increase the window size by alpha.
   else {
     cwnd_ += (double) alpha_ / cwnd_;
-    if (debug_) {
+    if (true) {
       cerr << "+++       cwnd_:\t" << cwnd_
-           << "\trtt_thresh_ms:\t" << rtt_average_
+           << "\trtt_average_:\t" << rtt_average_
            << "\trtt:\t" << rtt_delay_ms << endl;
     }
   }

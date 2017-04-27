@@ -403,10 +403,14 @@ this low-throughput state to utilize the available bandwidth, and when it did
 break out of this state, it often overshot the available bandwidth, causing
 large queuing delays. We worked to address this in our following attempt.
 
-\subsection*{BBR-like Congestion-based Congestion Control}
+\subsection*{Delay-Based Additive Increase, Additive Decrease}
 Next, we referred to the
 BBR\footnote{\url{http://dl.acm.org/citation.cfm?id=3022184}}
 congestion-based congestion control algorithm.
+
+One limitation is that our algorithm assumes that the round trip propagation
+delay does not change over the course of the trace. Our algorithm would not
+be able to adjust to changes in propagation delay.
 
 \vfill
 \pagebreak
