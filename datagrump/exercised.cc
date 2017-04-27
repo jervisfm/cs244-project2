@@ -8,23 +8,24 @@ using namespace std;
 
 /* Default constructor */
 ExDController::ExDController( const bool debug )
-  : Controller::Controller( debug ), cwnd_(10), alpha_(2.0), beta_(5.0),
-    rtt_thresh_ms_(50),
+  : Controller::Controller( debug ),
+    cwnd_(10),
+    alpha_(2.0),
+    beta_(5.0),
+    rtt_average_(50),
+    rtt_allowance_(1.4),
     rtt_min_(80.0),
-    weight_(0.01) {
+    ewma_weight_(0.01) {
   cerr << "Exercise C" << endl;
 }
 
 /* Get current window size, in datagrams */
 unsigned int ExDController::window_size( void ) {
-  /* Default: fixed window size of 100 outstanding datagrams */
-  // unsigned int the_window_size = 50;
-
   if ( debug_ ) {
     cerr << "At time " << timestamp_ms()
          << " window size is " << cwnd_ << endl;
   }
-
+  // Simply return the cwnd_
   return (unsigned int) cwnd_;
 }
 
@@ -45,9 +46,38 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
                                   const uint64_t send_timestamp_acked,
                                   const uint64_t recv_timestamp_acked,
                                   const uint64_t timestamp_ack_received ) {
-  // TODO: Increse window size +1) when RTT above rtt_thresh_ms_ and
-  // reduce it by -1 when RTT below rtt_thresh_ms_
+  // Calculate the RTT of the packet we just received
   double rtt_delay_ms = timestamp_ack_received - send_timestamp_acked;
+
+  // Track the minimum RTT to use as a reference for RT_prop
+  rtt_min_ = min(rtt_min_, rtt_delay_ms);
+
+  // Keep an EWMA of the rtt seen so far.
+  rtt_average_ = ewma_weight_ * rtt_delay_ms +
+                 (1 - ewma_weight_) * rtt_average_;
+
+  // If the current RTT is outside of the "stable" range of the average,
+  // addtively decrease cwnd by beta, and reset the average to be RT_prop.
+  if (rtt_delay_ms > (rtt_allowance_ *  rtt_average_)) {
+    cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
+    rtt_average_ = rtt_min_; // reset RTT
+    if (debug_) {
+      cerr << "      --- cwnd_:\t" << cwnd_
+           << "\trtt_thresh_ms:\t" << rtt_average_
+           << "\trtt:\t" << rtt_delay_ms << endl;
+    }
+  }
+  // If the current RTT is within a stable range, continue to additively
+  // increase the window size by alpha.
+  else {
+    cwnd_ += (double) alpha_ / cwnd_;
+    if (debug_) {
+      cerr << "+++       cwnd_:\t" << cwnd_
+           << "\trtt_thresh_ms:\t" << rtt_average_
+           << "\trtt:\t" << rtt_delay_ms << endl;
+    }
+  }
+
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
          << " received ack for datagram " << sequence_number_acked
@@ -56,32 +86,6 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
          << ", receive_ack: "  << timestamp_ack_received
          << ", rtt_delay_ms: " << rtt_delay_ms
          << endl;
-  }
-  rtt_min_ = min(rtt_min_, rtt_delay_ms);
-  rtt_thresh_ms_ = weight_ * rtt_delay_ms + (1 - weight_) * rtt_thresh_ms_;
-
-  if (rtt_delay_ms > (1.4 *  rtt_thresh_ms_)) {
-    double diff_ms = rtt_delay_ms - rtt_thresh_ms_;
-    cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
-    // cwnd_ = max((cwnd_ - beta_), 1.0); // min cwnd = 1
-    rtt_thresh_ms_ = rtt_min_; // reset RTT
-    // cerr << "      --- cwnd_:\t" << cwnd_
-    //      << "\trtt_thresh_ms:\t" << rtt_thresh_ms_
-    //      << "\trtt:\t" << rtt_delay_ms << endl;
-    if (debug_) {
-      cerr << "<<< Exceeded RTT Threshold by " << diff_ms <<
-      "ms. Reducing Window size" << endl;
-    }
-  }
-  else {
-    if (debug_) {
-      cerr << "Still within RTT threshold limits, increasing cwnd" << endl;
-    }
-    cwnd_ += (double) alpha_ / cwnd_;
-    // cwnd_ += alpha_;
-    // cerr << "+++       cwnd_:\t" << cwnd_
-    //      << "\trtt_thresh_ms:\t" << rtt_thresh_ms_
-    //      << "\trtt:\t" << rtt_delay_ms << endl;
   }
 }
 

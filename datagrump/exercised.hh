@@ -7,10 +7,11 @@ private:
     double cwnd_;
     double alpha_;
     double beta_;
+    double rtt_average_;
     // RTT Threshold to adjust cwnd.
-    double rtt_thresh_ms_;
+    double rtt_allowance_;
     double rtt_min_;
-    double weight_;
+    double ewma_weight_;
 public:
     ExDController( const bool debug);
 

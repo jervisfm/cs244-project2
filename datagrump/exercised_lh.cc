@@ -107,5 +107,5 @@ void ExDLHController::ack_received( const uint64_t sequence_number_acked,
 /* How long to wait (in milliseconds) if there are no acks
    before sending one more datagram */
 unsigned int ExDLHController::timeout_ms( void ) {
-  return 1000; /* timeout of one second */
+  return 200; /* timeout of one second */
 }

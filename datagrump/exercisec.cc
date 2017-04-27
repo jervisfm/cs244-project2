@@ -8,7 +8,7 @@ using namespace std;
 
 /* Default constructor */
 ExCController::ExCController( const bool debug )
-  : Controller::Controller( debug ), cwnd_(10), alpha_(3.0), beta_(5.0),
+  : Controller::Controller( debug ), cwnd_(10), alpha_(2.0), beta_(5.0),
     rtt_thresh_ms_(50),
     rtt_min_(80.0),
     weight_(0.01) {
@@ -88,5 +88,5 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
 /* How long to wait (in milliseconds) if there are no acks
    before sending one more datagram */
 unsigned int ExCController::timeout_ms( void ) {
-  return 1000; /* timeout in milliseconds */
+  return 25; /* timeout in milliseconds */
 }
