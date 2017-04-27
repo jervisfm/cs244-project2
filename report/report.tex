@@ -388,8 +388,8 @@ This approach used the following parameters:
 We initialized our estimated RTT to $80$ ms, and our estimated receiver rate to
 1 datagram per 2.4 ms (approximately 5Mbps). The weight is used in updating the
 average time between datagrams received by the receiver as
-$time = (weight * measured_time) + ((1 - weight) * time)$
-where $measured_time$ is the time interval between datagrams received, and the
+$time = (weight * measured\_time) + ((1 - weight) * time)$
+where $measured\_time$ is the time interval between datagrams received, and the
 rate is calculated as $1$ datagram per $time$. This means that a larger weight
 gives more influence to the current measurement than past measurements. On
 our trace, the estimated RTT converges to the minimum RTT of 42ms.
