@@ -239,7 +239,7 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
     cwnd_ += 1;
   } else if (sequence_number_acked > 0)  {
     // Increase cwnd so long as RTT not spiking up and bandwidth increased.
-    if (rtt_change_percent < 3) {
+    if (rtt_change_percent < 4) {
         debug_printf(INFO, "RTT still stable, growing window size.");
         //cwnd_ += 1/rtt_min_initial_estimate();
         cwnd_ += .23;
@@ -247,7 +247,7 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
       // RTT change increased abruptly, pull back cwnd
       if (did_increase_cwnd_) {
         debug_printf(WARN, "RTT jumped too much, pulling back cwnd.");
-        cwnd_ *= 0.75;
+        cwnd_ *= 0.8;
       }
     }
       
