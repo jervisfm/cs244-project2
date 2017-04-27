@@ -369,7 +369,7 @@ In our first approach, we referred to the Sprout-
 EWMA\footnote{\url{http://alfalfa.mit.edu/}} idea of using an exponentially
 weighted moving average to estimate the rate that the receiver was receiving
 datagrams. This served as a proxy of the bottleneck bandwidth
-capacity and varied over time. We then approximated the RTT to as the minimum
+capacity and varied over time. We approximated the RTT as the minimum
 RTT that was seen during the flow.
 Then, our algorithm tried to maintain the bandwidth delay product number of
 datagrams in flight at any given time as $RTT_{estimate} * BW_{estimate}$ using
