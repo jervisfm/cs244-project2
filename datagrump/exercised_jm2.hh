@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 
+// Default number of previous samples to consider for the sliding window.
+static const int DEFAULT_WINDOW_NUM_SAMPLES = 10;
 
 // Exercise D controller for Jervis' implementation.
 // A custom controller implemementation that's forked off an earlier attempt at BBR.
@@ -38,10 +40,10 @@ private:
   bool delivery_rate_increased();
   
   // Returns the minimum rtt about the past number of samples. Unit is milliseconds.
-  double sliding_min_rtt(int num_samples=10);
+  double sliding_min_rtt(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES);
 
   // Returns the maximum bandwidth over the past number of samples. Unit is bytes/msec
-  double sliding_max_bandwidth(int num_samples=10);
+  double sliding_max_bandwidth(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES);
   
   // Returns the current estimate for bandwidth delay product. This is a product
   // sliding_min_rtt() and sliding_max_bandwidth().
