@@ -25,6 +25,8 @@ private:
     double previous_min_rtt_;
     // The greatest sequence number successfully acked so far.
     uint64_t last_sequence_number_acked_;
+    // Track whether on the previous ack, did we increase our cwnd ?
+    bool did_increase_cwnd_;
     // Keeps track of all RTT samples we have seen so far.
     std::vector<double> rtt_samples_;
     // Keep track of how much in magnitude the min rtt samples are changing.

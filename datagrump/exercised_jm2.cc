@@ -25,6 +25,7 @@ ExDJM2Controller::ExDJM2Controller( const bool debug )
     num_bytes_sent_(0),
     previous_min_rtt_(0.0),
     last_sequence_number_acked_(0),
+    did_increase_cwnd_(false),
     rtt_samples_(),
     min_rtt_delta_samples_(),
     time_to_data_map_()
@@ -56,18 +57,13 @@ unsigned int ExDJM2Controller::window_size( void )
   // Try to Cap windows size to not grow beyond BDP.
   int bdp_outstanding_packets = bdp_packets();
   window_size = bdp_outstanding_packets;
-
-  // Pick random cwnd. (for some reason rand() window size breaks the emulation.).
-  //cwnd_ = rand() % 7;
   
-  // Try to have a min window size of 4 to always keep things on the move.
-  window_size = std::max(4.0, cwnd_);
 
   //debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
-   //return window_size;
-   return 100;
+  return window_size;
+  //return 100;
 }
 
 /* A datagram was sent */
@@ -231,7 +227,32 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
                inflight_packets_,
                num_bytes_sent_kb());
 
+  double original_cwnd_ = cwnd_;
   
+  if ( sequence_number_acked == 0) {
+    cwnd_ += 1;
+  } else if (sequence_number_acked > 0)  {
+    // Increase cwnd so long as RTT not spiking up and bandwidth increased.
+
+    if (rtt_change_percent < 3) {
+        debug_printf(INFO, "RTT still stable, growing window size.");
+        cwnd_ += 1;
+    } else {
+      // RTT change increased abruptly, pull back cwnd
+      if (did_increase_cwnd_) {
+        cwnd_ /= 2;
+      }
+    }
+      
+  }
+
+  
+  // Track whether we increased cwnd in this ACK processing sessions.
+  if (cwnd_ > original_cwnd_) {
+    did_increase_cwnd_ = true;
+  } else {
+    did_increase_cwnd_ = false;
+  }
   
 }
 
