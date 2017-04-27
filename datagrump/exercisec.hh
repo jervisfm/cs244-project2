@@ -8,8 +8,9 @@ private:
     double alpha_;
     double beta_;
     // RTT Threshold to adjust cwnd.
-    const double rtt_thresh_ms_;
-
+    double rtt_thresh_ms_;
+    double rtt_min_;
+    double weight_;
 public:
     ExCController( const bool debug);
 
