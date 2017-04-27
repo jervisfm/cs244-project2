@@ -50,6 +50,17 @@ private:
   // Computes the (estimated) inflight bandwidth delay product. Useful to know when
   // to swutch to PROBE_BW mode.
   double inflight_bdp() ;
+
+  // Number of bytes sent in kilobytes.
+  double num_bytes_sent_kb() {
+    return num_bytes_sent_ / 1024.0;
+  }
+
+  // Number of bytes sent in megabytes.
+  double num_bytes_sent_mb() {
+    return num_bytes_sent_ / (1024 * 1024);
+  }
+
   
   // Debugging test functions. Can be removed once we're confident in the implementation.
   void test_delivery_rates();

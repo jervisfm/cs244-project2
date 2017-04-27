@@ -47,9 +47,8 @@ unsigned int ExDJM2Controller::window_size( void )
    //  debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
-  return window_size;
+   return window_size;
 }
-
 
 /* A datagram was sent */
 void ExDJM2Controller::datagram_was_sent(  const uint64_t sequence_number, /* of the sent datagram */
@@ -88,7 +87,7 @@ double ExDJM2Controller::sliding_min_rtt(int num_samples) {
 
 std::vector<double> ExDJM2Controller::delivery_rates() {
   std::vector<double> rates;
-  // Loop over all the time -> num data sent samples in order and compute a vectory
+  // Loop over all the time -> num data sent samples in order and compute a vector
   // of delivery rates so far.
   int count = 0;
   std::pair<int, double> previous_entry;
@@ -161,7 +160,7 @@ bool ExDJM2Controller::delivery_rate_increased() {
   double current_value = rates[rates.size() - 1];
   double prior_value =  rates[rates.size() - 2];
   double change_magnitude = (current_value / prior_value);
-  double change_threshold = 1.20;
+  double change_threshold = 1.10;
   if (change_magnitude >= change_threshold) {
     return true;
   } else {
@@ -199,7 +198,7 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);
-  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth: %.1f, # Pkts inflight: %d", sliding_min_rtt(), sliding_max_bandwidth(), inflight_packets_);
+  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth: %.1f, # Pkts inflight: %d # Kbytes sent:", sliding_min_rtt(), sliding_max_bandwidth(), inflight_packets_, num_bytes_sent_kb());
 
 
   // In start up mode, grow the cwnd exponetially.
