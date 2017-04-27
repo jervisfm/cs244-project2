@@ -546,7 +546,7 @@ our initial misunderstanding of ``signal delay''. We had previously assumed
 that we were trying to minimize the delay of individual datagrams. However,
 ``signal delay'' is also negatively affected by dead time, when no datagrams
 are being sent. By lowering timeout, we ensure that there is a minimum trickle
-of datagrams being sent, as a rate that is low enough to not negatively bloat
+of datagrams being sent, at a rate that is low enough to not negatively bloat
 buffers, but frequently enough to ensure that our signal delay is not affected
 by seconds of dead time.
 
