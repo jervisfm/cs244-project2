@@ -30,7 +30,7 @@ ExDJM2Controller::ExDJM2Controller( const bool debug )
     time_to_data_map_()
           
 {
-  cerr << "Exercise D Jervis Controller" << endl;
+  cerr << "Exercise D Jervis Custon (NonBBR) Controller" << endl;
 }
 
 /* Get current window size, in datagrams */
