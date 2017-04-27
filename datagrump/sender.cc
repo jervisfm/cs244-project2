@@ -74,10 +74,10 @@ DatagrumpSender::DatagrumpSender( const char* const host,
   // controller_.reset(new DefaultController(debug));
   //controller_.reset(new ExAController(debug));
   //controller_.reset(new ExBController(debug));
-  //controller_.reset(new ExCController(debug));
-  //controller_.reset(new ExDController(debug));
+  // controller_.reset(new ExCController(debug));
+  controller_.reset(new ExDController(debug));
   // controller_.reset(new ExDJMController(debug));  // Controller for Jervis M.
-  controller_.reset(new ExDJM2Controller(debug));  // Custon (non bbr) Controller  for Jervis M.
+  // controller_.reset(new ExDJM2Controller(debug));  // Custon (non bbr) Controller  for Jervis M.
   //controller_.reset(new ExDLHController(debug));  // Controler for Luke H.
 
   /* turn on timestamps when socket receives a datagram */

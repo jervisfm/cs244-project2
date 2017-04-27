@@ -2,6 +2,15 @@
 #define EXERCISE_D_CONTROLLER_HH
 
 class ExDController : public Controller {
+
+private:
+    double cwnd_;
+    double alpha_;
+    double beta_;
+    // RTT Threshold to adjust cwnd.
+    double rtt_thresh_ms_;
+    double rtt_min_;
+    double weight_;
 public:
     ExDController( const bool debug);
 
