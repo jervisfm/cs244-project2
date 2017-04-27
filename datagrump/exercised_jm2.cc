@@ -245,16 +245,15 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
         if (did_increase_cwnd_) {
           if (delivery_rate_increased()) {
             debug_printf(ERROR, "Delivery rate increased from cwnd growth!!!");
-            
+            cwnd_ += 1/2;
           }
         }
-        //cwnd_ += 1/rtt_min_initial_estimate();
-        cwnd_ += .25;
+        cwnd_ += 0.1;
     } else {
       // RTT change increased abruptly, pull back cwnd
       if (did_increase_cwnd_) {
         debug_printf(WARN, "RTT jumped too much, pulling back cwnd.");
-        cwnd_ *= 0.5;
+        cwnd_ *= 0.6;
       }
     }
       
@@ -274,6 +273,6 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExDJM2Controller::timeout_ms( void )
 {
-  int timeout_ms = 200; 
+  int timeout_ms = 20; 
   return timeout_ms;
 }
