@@ -23,8 +23,10 @@ ExDJM2Controller::ExDJM2Controller( const bool debug )
     cwnd_(1),
     cwnd_gain_(0.8),
     num_bytes_sent_(0),
+    previous_min_rtt_(0.0),
     last_sequence_number_acked_(0),
     rtt_samples_(),
+    min_rtt_delta_samples_(),
     time_to_data_map_()
           
 {
@@ -46,14 +48,17 @@ unsigned int ExDJM2Controller::window_size( void )
   int bdp_outstanding_packets = bdp_packets();
   window_size = bdp_outstanding_packets;
 
+  // Pick random cwnd. (for some reason rand() window size breaks the emulation.).
+  //cwnd_ = rand() % 7;
+  
   // Try to have a min window size of 4 to always keep things on the move.
   window_size = std::max(4.0, cwnd_);
 
    debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   //debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
-   return 2;
    //return window_size;
+   return 10;;
 }
 
 /* A datagram was sent */
@@ -191,6 +196,11 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
   double rtt_ms = timestamp_ack_received - send_timestamp_acked;
   rtt_samples_.emplace_back(rtt_ms);
   double average_rtt_ms = average_rtt();
+  
+  double rtt_change = sliding_min_rtt() - previous_min_rtt_;
+  double rtt_change_percent = rtt_change / previous_min_rtt_ * 100.0;
+  min_rtt_delta_samples_.emplace_back(rtt_change);
+  previous_min_rtt_ = sliding_min_rtt();
 
   // Update stats for delivery rate.
   // TODO: Do we need to worry about out of order UDP packet delivery ? 
@@ -204,7 +214,13 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);
-  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth (kbits/sec): %.1f, # Pkts inflight: %d # Kbytes sent: %.1f", sliding_min_rtt(), sliding_max_bandwidth_kbs(), inflight_packets_, num_bytes_sent_kb());
+  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f RTT delta (ms): %.1f (%.1f%%) Sliding Window Max Bandwidth (kbits/sec): %.1f, # Pkts inflight: %d # Kbytes sent: %.1f",
+               sliding_min_rtt(),
+               rtt_change,
+               rtt_change_percent,
+               sliding_max_bandwidth_kbs(),
+               inflight_packets_,
+               num_bytes_sent_kb());
 
 
   // In start up mode, grow the cwnd exponetially.

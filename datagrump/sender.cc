@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <memory>
+#include <chrono>
+#include <thread>
 
 #include "contest_message.hh"
 #include "controller.hh"
