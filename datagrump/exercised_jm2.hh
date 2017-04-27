@@ -17,8 +17,6 @@ private:
     double cwnd_;
     // Factor to fudge BDP by.
     double cwnd_gain_;
-    // Factor to fudge the delay by.
-    double pacing_gain_;
     // Total number data bytes sent.
     double num_bytes_sent_;
     // The greatest sequence number successfully acked so far.

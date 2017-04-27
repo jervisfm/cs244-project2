@@ -22,7 +22,6 @@ ExDJM2Controller::ExDJM2Controller( const bool debug )
     inflight_packets_(0),
     cwnd_(1),
     cwnd_gain_(0.8),
-    pacing_gain_(0.9),
     num_bytes_sent_(0),
     last_sequence_number_acked_(0),
     rtt_samples_(),
