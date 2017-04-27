@@ -346,10 +346,10 @@ We believe that even a simple-delay based algorithm was able to outperform
 AIMD or a fixed window scheme due to its ability to react to congestion in the
 network (by observing RTTs of individual datagrams). In the fixed window scheme,
 no adjustments were made for congestion, and in the AIMD scheme of the previous
-exercise, the algorithm only reacted to timeouts (since our mahimahi
-environment does not drop datagrams). Consequently, AIMD would still cause
-bufferbloat during additive increase, and had to wait for timeouts to stop its
-growth, rather than the growing queueing delay.
+exercise, the algorithm only reacted to timeouts arising from bloated buffers
+(since our mahimahi environment does not drop datagrams). Consequently, AIMD
+would still cause bufferbloat during additive increase, and had to wait for
+timeouts to stop its growth, rather than the growing queueing delay.
 
 \vfill
 \pagebreak
