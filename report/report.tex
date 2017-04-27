@@ -431,9 +431,9 @@ recover from these large drops, and would often take 5 or more seconds before
 utilizing the available bandwidth.
 
 Ultimately, the primary flaw of this approach is that if the algorithm reached
-some steady state at a low throughput, and was unable to quickly break out of
-this low-throughput state to utilize the available bandwidth, and when it did
-break out of this state, it often overshot the available bandwidth, causing
+some steady state at a low throughput, it was unable to quickly break out of
+this low-throughput state to utilize the (increased) available bandwidth. Further,
+when it did break out of this state, it often overshot the available bandwidth, causing
 large queuing delays. We worked to address this in our following attempt.
 
 \subsection*{Rocinante: Delay-Based Additive Increase, Additive Decrease}
