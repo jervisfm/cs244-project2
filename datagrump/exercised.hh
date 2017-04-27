@@ -16,6 +16,7 @@ private:
     double rtt_allowance_;
     double rtt_min_;
     double ewma_weight_;
+    unsigned int timeout_;
     std::vector<double> rtt_samples_;
 
     // Returns the minimum rtt about the past number of samples. Unit is milliseconds.

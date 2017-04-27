@@ -16,6 +16,7 @@ ExDController::ExDController( const bool debug )
     rtt_allowance_(1.4),
     rtt_min_(80.0),
     ewma_weight_(0.01),
+    timeout_(25),
     rtt_samples_() {
   cerr << "Exercise C" << endl;
 }
@@ -76,7 +77,7 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   if (rtt_delay_ms > (rtt_allowance_ *  rtt_average_)) {
     cwnd_ = max(cwnd_ - (beta_ / cwnd_), 1.0); // min cwnd = 1
     rtt_average_ = rtt_min_; // reset RTT
-    if (true) {
+    if (debug_) {
       cerr << "      --- cwnd_:\t" << cwnd_
            << "\trtt_average_:\t" << rtt_average_
            << "\trtt:\t" << rtt_delay_ms << endl;
@@ -86,7 +87,7 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   // increase the window size by alpha.
   else {
     cwnd_ += alpha_ / cwnd_;
-    if (true) {
+    if (debug_) {
       cerr << "+++       cwnd_:\t" << cwnd_
            << "\trtt_average_:\t" << rtt_average_
            << "\trtt:\t" << rtt_delay_ms << endl;
@@ -107,5 +108,5 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
 /* How long to wait (in milliseconds) if there are no acks
    before sending one more datagram */
 unsigned int ExDController::timeout_ms( void ) {
-  return 25; /* timeout in milliseconds */
+  return timeout_; /* timeout in milliseconds */
 }

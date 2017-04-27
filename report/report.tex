@@ -321,10 +321,10 @@ when combined with our selection of alpha and beta.
 This approach produced the best score of any of our attempts thus far.
 We believe that even a simple-delay based algorithm was able to outperform
 AIMD or a fixed window scheme due to it's ability to react to congestion in the
-network (by observing RTTs of individual packets). In the fixed window scheme,
+network (by observing RTTs of individual datagrams). In the fixed window scheme,
 no ajudstments were made for congestion, and in the AIMD scheme of the previous
 exercise, the algorithm only reacted to timeouts (since our mahimahi
-environment does not drop packets). Consequently, AIMD would still cause
+environment does not drop datagrams). Consequently, AIMD would still cause
 bufferbloat during additive increase, and had to wait for timeouts to stop its
 growth, rather than the growing queueing delay.
 
@@ -466,10 +466,57 @@ Table~\ref{tab:rocinante}.
     \toprule
     \textbf{alpha} & \textbf{beta} & \textbf{rtt\_allowance} & \textbf{ewma\_weight} & \textbf{timeout} & \textbf{\specialcell{Throughput\\(Mbits/s)}} & \textbf{\specialcell{95\% Signal\\Delay (ms)}} & \textbf{Score} \\
     \midrule
-    X  & X & X   & X & X    & X     & X & X \\
+    1  & 2  & 1.4 & 0.15  & 1000 & 4.94 & 2064 & 2.39 \\
+    1  & 4  & 1.4 & 0.15  & 1000 & 4.85 & 1902 & 2.54 \\
+    1  & 5  & 1.4 & 0.15  & 1000 & 4.85 & 1896 & 2.56 \\
+    1  & 10 & 1.4 & 0.15  & 1000 & 4.67 & 1788 & 2.61 \\
+    2  & 5  & 1.4 & 0.15  & 1000 & 4.98 & 2807 & 1.77 \\
+    2  & 5  & 1.4 & 0.01  & 1000 & 3.25 & 120  & 27.08 \\
+    2  & 5  & 1.4 & 0.00  & 1000 & 2.92 & 114  & 25.61 \\
+    5  & 2  & 1.4 & 0.01  & 1000 & 4.71 & 1853 & 2.54 \\
+    2  & 5  & 1.1 & 0.01  & 1000 & 0.42 & 111  & 3.78 \\
+    2  & 5  & 1.5 & 0.01  & 1000 & 4.00 & 643  & 6.22 \\
+    2  & 5  & 1.4 & 0.01  & 100  & 3.29 & 105  & 31.33 \\
+    2  & 5  & 1.4 & 0.01  & 50   & 3.24 & 83   & 39.04 \\
+    2  & 5  & 1.4 & 0.01  & 25   & 3.47 & 86   & 40.35 \\
+    2  & 5  & 1.4 & 0.01  & 15   & 3.55 & 98   & 36.22 \\
+    2  & 5  & 1.4 & 0.005 & 15   & 3.21 & 78   & 41.15 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+From our experiments, and by observing the behavior of the throughput and
+queueing delay graphs paired with debug outputs, we saw that out initial
+choice of EWMA weight ($0.15$) allowed the average to drift too quickly, and
+thus allowed the algorithm to bloat the buffers. Instead, lowering this weight
+such that the average stayed relatiely close to our estimate of the propagation
+delay significantly reduced the 95-percentile signal delay. However, we also
+found that eliminating the weight entirely could negatively affect our score.
+An alternative approach may have been to eliminate the EWMA average and use
+some statistical variance to determine what RTT's to consider ``stable'', but
+we did not explore this alternative.
+
+Next, we found that it was important in our AIAD algorithm to ensure that
+additive decrease occurred at a rate that was faster than additive increase.
+Intuitively, this allows the algorithm to more quickly close the window when
+congestion is detected. If we used an even more aggressive decrease (e.g.
+exponential), we found that throughput was wasted as just a few decreases could
+almost completely close the window.
+
+When we experimented with the RTT allowance, which defines how much a measured
+RTT can exceed the average while still being considered ``stable'', we initially
+selected a vale of $1.4$ due to our observations from an experiment with a
+fixed window size of 1 datagram. In particular, we saw that the minimum RTT was
+42 ms, and that individual packet RTTs could vary significantly from about 40ms
+up to about 60ms. Further experiments with a small allowance shows that small
+allowance is too limiting, and hurts throughput performance. Consequently, we
+selected an allowance of about $1.4$ (i.e. a measured RTT value that is $1.4\times$
+larger than the average can be considered stable). This seemed to work well due
+the nature of the cellular network trace, which resulted in large ($>1.4\times$)
+spikes in RTT when the throughput of the link dropped. Similar to the RTT
+average, the purpose of this is just to define what a ``stable'' RTT looks like,
+and an alternative approach could be using statistics on the RTTs seen, rather
+than a fixed allowance as we have implemented here.
 
 We found that tuning the first four parameters resulted in a score of slightly
 less than 30, but we were unable to exceed this. Unexpectedly, lowering the
@@ -481,6 +528,10 @@ are being sent. By lowering timeout, we ensure that there is a minimum trickle
 of datagrams being sent, as a rate that is low enough to not negatively bloat
 buffers, but frequently enough to ensure that our signal delay is not affected
 by seconds of dead time.
+
+Overall, our algorithm was most sensitive to changes to the RTT allowance, EWMA
+weighting, and timeout. The choice of alpha and beta had less affect as long as
+both values were relatively small, and beta was larger than alpha.
 
 \begin{figure}[h]
   \centering
@@ -504,8 +555,8 @@ the Pareto frontier.
   Pick a cool name for your scheme!
 \end{question}
 
-We call our approach \fbox{\texttt{Rocinante}}, named after the light,
-fast-attack, ship in The Expanse.
+We call our approach \fbox{\texttt{Rocinante}}, named after the light, agile,
+fast-attack ship in The Expanse.
 
 % =============================================================================
 \end{document}
