@@ -9,7 +9,7 @@ using namespace std;
 
 /* Default constructor */
 ExCController::ExCController( const bool debug )
-  : Controller::Controller( debug ), cwnd_(10), alpha_(1), beta_(10), rtt_thresh_ms_(100)
+  : Controller::Controller( debug ), cwnd_(10), alpha_(1), beta_(10), rtt_thresh_ms_(90)
 {
     cerr << "Exercise C" << endl;
 }
@@ -64,15 +64,15 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
 
   if (rtt_delay_ms > rtt_thresh_ms_) {
     double diff_ms = rtt_delay_ms - rtt_thresh_ms_;
+    cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
     if (debug_) {
       cerr << "<<< Exceeded RTT Threshold by " << diff_ms << "ms. Reducing Window size" << endl;
-      cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
     }
   } else {
     if (debug_) {
       cerr << "Still within RTT threshold limits, increasing cwnd" << endl;
-      cwnd_ += (double) alpha_ / cwnd_;
     }
+    cwnd_ += (double) alpha_ / cwnd_;
   }
 }
 
