@@ -8,7 +8,7 @@ using namespace std;
 
 /* Default constructor */
 ExCController::ExCController( const bool debug )
-  : Controller::Controller( debug ), cwnd_(10), alpha_(2.0), beta_(5.0),
+  : Controller::Controller( debug ), cwnd_(10), alpha_(3.0), beta_(5.0),
     rtt_thresh_ms_(50),
     rtt_min_(80.0),
     weight_(0.01) {
@@ -65,9 +65,9 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
     cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
     // cwnd_ = max((cwnd_ - beta_), 1.0); // min cwnd = 1
     rtt_thresh_ms_ = rtt_min_; // reset RTT
-    cerr << "      --- cwnd_:\t" << cwnd_
-         << "\trtt_thresh_ms:\t" << rtt_thresh_ms_
-         << "\trtt:\t" << rtt_delay_ms << endl;
+    // cerr << "      --- cwnd_:\t" << cwnd_
+    //      << "\trtt_thresh_ms:\t" << rtt_thresh_ms_
+    //      << "\trtt:\t" << rtt_delay_ms << endl;
     if (debug_) {
       cerr << "<<< Exceeded RTT Threshold by " << diff_ms <<
       "ms. Reducing Window size" << endl;
@@ -79,9 +79,9 @@ void ExCController::ack_received( const uint64_t sequence_number_acked,
     }
     cwnd_ += (double) alpha_ / cwnd_;
     // cwnd_ += alpha_;
-    cerr << "+++       cwnd_:\t" << cwnd_
-         << "\trtt_thresh_ms:\t" << rtt_thresh_ms_
-         << "\trtt:\t" << rtt_delay_ms << endl;
+    // cerr << "+++       cwnd_:\t" << cwnd_
+    //      << "\trtt_thresh_ms:\t" << rtt_thresh_ms_
+    //      << "\trtt:\t" << rtt_delay_ms << endl;
   }
 }
 
