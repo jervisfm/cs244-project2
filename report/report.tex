@@ -219,7 +219,7 @@ For this exercise, we implemented a simple AIMD protocol, which increments the
 \texttt{cwnd} by $alpha/cwnd$ on each ack, and decreases the window by
 \texttt{beta} on a loss event (i.e. $cwnd = cwnd / beta$).
 This mimics the AIMD behavior of TCP in congestion avoidance.
-In our mahimahi environment, there is no loss, and there is unbounded queues.
+In our mahimahi environment, there is no loss, and there are unbounded queues.
 Thus, to signal when a multiplicative decrease should occur, we use a fixed
 timeout value as a signal. We set the timeout to 80ms, which is approximately
 the 95-percentile signal delay on the top algorithms from the leaderboard.
