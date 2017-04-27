@@ -273,6 +273,10 @@ table) are not optimal.
   \label{fig:exb}
 \end{figure}
 
+These values are plotted in Figure~\ref{fig:exb}. Compared to the fixed window,
+we see that we are able to achieve slightly better throughput and delay at
+the best, but in general have larger delays than low fixed window sizes.
+
 
 \vfill
 \pagebreak
@@ -325,7 +329,7 @@ We found that using this approach, we achieved the best performance when the
 additive decrease occurred at a faster rate than the additive increase in order
 to quickly allow the queues to drain when a particular RTT is exceeded to reduce
 the queueing delay. We also found that the best RTT threshold was about 90ms,
-when combined with our selection of alpha and beta.
+when combined with our selection of alpha and beta (see Figure~\ref{fig:exc}).
 
 \begin{figure}[h]
   \centering
