@@ -62,6 +62,7 @@ unsigned int ExDJM2Controller::window_size( void )
 
   // Keep window size at least 1 to keep things moving.
   window_size = std::max(cwnd_, 1.0);
+
   
   //debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
@@ -273,6 +274,6 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExDJM2Controller::timeout_ms( void )
 {
-  int timeout_ms = 2000; 
+  int timeout_ms = 200; 
   return timeout_ms;
 }
