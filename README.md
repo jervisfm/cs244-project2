@@ -50,3 +50,8 @@ We gave up on this approach because we run out of time to implement it within th
 
 
 
+## Data points collection
+
+- 10 samples.
+alpha, beta, rtt_allowance, emwa_weight, timeout
+             1.4             0.001,       1000
