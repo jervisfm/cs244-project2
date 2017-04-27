@@ -407,7 +407,9 @@ large queuing delays. We worked to address this in our following attempt.
 
 After our first attempt, we decided build off of the delay-based algorithm from
 Exercise C. Specifically we built on the idea of using an additive-increase
-and additive decrease. However, unlike the previous.
+and additive decrease. However, unlike the previous attempt, which used a
+naive RTT threshold, we now use feedback from the acknowledge packets to set
+this threshold.
 
 One limitation is that our algorithm assumes that the round trip propagation
 delay does not change over the course of the trace. Our algorithm would not
