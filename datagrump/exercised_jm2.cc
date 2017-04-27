@@ -204,7 +204,7 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
   debug_printf(VERBOSE, "At time=%d received ack for datagram=%d. Sent: %d. Receipt (recv's clock): %d  RTT(ms): %.1f Running Avg RTT(ms): %.1f",
                timestamp_ack_received, sequence_number_acked, send_timestamp_acked,
                recv_timestamp_acked, rtt_ms, average_rtt_ms);
-  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth: %.1f, # Pkts inflight: %d # Kbytes sent: %.1f", sliding_min_rtt(), sliding_max_bandwidth(), inflight_packets_, num_bytes_sent_kb());
+  debug_printf(INFO, "Sliding Window Min RTT(ms): %.1f Sliding Window Max Bandwidth (kbits/sec): %.1f, # Pkts inflight: %d # Kbytes sent: %.1f", sliding_min_rtt(), sliding_max_bandwidth_kbs(), inflight_packets_, num_bytes_sent_kb());
 
 
   // In start up mode, grow the cwnd exponetially.
