@@ -54,11 +54,11 @@ unsigned int ExDJM2Controller::window_size( void )
   // Try to have a min window size of 4 to always keep things on the move.
   window_size = std::max(4.0, cwnd_);
 
-   debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
-  //debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
+  //debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
+  debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
 
    //return window_size;
-   return 10;;
+   return 100;
 }
 
 /* A datagram was sent */
