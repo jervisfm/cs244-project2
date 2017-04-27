@@ -42,7 +42,7 @@ int ExDJM2Controller::bdp_packets() {
 double ExDJM2Controller::rtt_min_intial_estimate() {
   if (rtt_samples_.empty()) {
     // Use a sensible default guess.
-    40;
+    return 40;
   } else {
     return rtt_samples_[0];
   }
@@ -231,8 +231,6 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
                inflight_packets_,
                num_bytes_sent_kb());
 
-
-  // In start up mode, grow the cwnd exponetially.
   
   
 }
