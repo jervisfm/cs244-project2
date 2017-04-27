@@ -214,6 +214,6 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int ExDJM2Controller::timeout_ms( void )
 {
-  int timeout_ms = 100; 
+  int timeout_ms = 2000; 
   return timeout_ms;
 }
