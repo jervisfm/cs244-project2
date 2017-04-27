@@ -57,7 +57,8 @@ unsigned int ExDJM2Controller::window_size( void )
   // Try to Cap windows size to not grow beyond BDP.
   int bdp_outstanding_packets = bdp_packets();
   window_size = bdp_outstanding_packets;
-  
+
+  window_size = cwnd_;
 
   //debug_printf(INFO, "At time %d, window size is %d", timestamp_ms(), window_size);
   debug_printf(VERBOSE, "At time %d, window size is %d", timestamp_ms(), window_size);
