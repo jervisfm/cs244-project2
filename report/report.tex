@@ -540,7 +540,7 @@ and an alternative approach could be using statistics on the RTTs seen, rather
 than a fixed allowance as we have implemented here.
 
 We found that tuning the first four parameters resulted in a score of slightly
-less than 30, but we were unable to exceed this. Unexpectedly, lowering the
+less than 30, and we were unable to exceed this. Unexpectedly, lowering the
 timeout value significantly improved our score. We suspect that this is due to
 our initial misunderstanding of ``signal delay''. We had previously assumed
 that we were trying to minimize the delay of individual datagrams. However,
