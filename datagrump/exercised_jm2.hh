@@ -5,7 +5,6 @@
 #include <vector>
 #include <map>
 
-static const double HIGH_GAIN = 2.0 / log(2);
 
 // Exercise D controller for Jervis' implementation.
 // A custom controller implemementation that's forked off an earlier attempt at BBR.
@@ -18,8 +17,6 @@ private:
      PROBE_BW,
      PROBE_RTT,
     };
-    // State of bbr algorithm
-    BBR_STATE bbr_state_;
     // Number of packets outstanding in the network.
     int inflight_packets_;
     // Value to control cwnd directly in startup mode.
@@ -64,35 +61,6 @@ private:
   
   // Debugging test functions. Can be removed once we're confident in the implementation.
   void test_delivery_rates();
-
-  inline bool mode_startup() {
-    return bbr_state_ == BBR_STATE::STARTUP;
-  }
-
-  inline bool mode_probe_bw() {
-    return bbr_state_ == BBR_STATE::PROBE_BW;
-  }
-
-  inline bool mode_probe_rtt() {
-    return bbr_state_ == BBR_STATE::PROBE_RTT;
-  }
-
-  inline bool mode_drain() {
-    return bbr_state_ == BBR_STATE::DRAIN;
-  }
-
-  inline void switch_to_mode_drain() {
-    // Switch to drain mode. Keep the original cwnd gain inplace.
-    bbr_state_ = BBR_STATE::DRAIN;
-    pacing_gain_ = 1.0/HIGH_GAIN;
-    cwnd_gain_ = HIGH_GAIN;
-  }
-
-  inline void switch_to_mode_probe_bw() {
-    bbr_state_ = BBR_STATE::PROBE_BW;
-    pacing_gain_ = 1.0;
-    cwnd_gain_ = 2;
-  }
   
 public:
     ExDJM2Controller( const bool debug);

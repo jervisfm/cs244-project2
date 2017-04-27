@@ -19,7 +19,6 @@ static const int PACKET_SIZE_BYTES = 1472;
 /* Default constructor */
 ExDJM2Controller::ExDJM2Controller( const bool debug )
   : Controller::Controller( debug ),
-    bbr_state_(BBR_STATE::STARTUP),
     inflight_packets_(0),
     cwnd_(1),
     cwnd_gain_(0.8),
@@ -207,32 +206,6 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
 
 
   // In start up mode, grow the cwnd exponetially.
-  debug_printf(INFO, "Mode: %d", bbr_state_);
-  if (mode_startup()) {
-    debug_printf(INFO, "Start up mode");
-    if (delivery_rate_increased()) {
-      cwnd_gain_ = HIGH_GAIN;
-      pacing_gain_ = HIGH_GAIN;
-    } else {
-      switch_to_mode_drain();
-    } 
-  } else if (mode_drain()) {
-    debug_printf(INFO, "Drain mode");
-    double target_bdp = bandwidth_delay_product();
-    if (inflight_bdp() <= target_bdp) {
-      // Switch to cruise mode aka Probe_BW
-      switch_to_mode_probe_bw();
-    } else {
-      debug_printf(INFO, "inflight pkts: %d target_bdp(bytes): %.f inflight_bdp: %.f DIFF: %.f",
-                   inflight_packets_, target_bdp, inflight_bdp(), (inflight_bdp() - target_bdp)); 
-    }
-  } else if (mode_probe_bw()) {
-    // TODO
-    // Implement gain cycling for Probe BW.
-    debug_printf(INFO, "Probe BW  mode");
-
-  }
-
   
   
 }
