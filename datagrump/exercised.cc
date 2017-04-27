@@ -66,7 +66,7 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   double rtt_delay_ms = timestamp_ack_received - send_timestamp_acked;
   rtt_samples_.emplace_back(rtt_delay_ms);
   // Track the minimum RTT to use as a reference for RT_prop
-  rtt_min_ = sliding_min_rtt(1000);
+  rtt_min_ = sliding_min_rtt(2000);
 
   // Keep an EWMA of the rtt seen so far.
   rtt_average_ = ewma_weight_ * rtt_delay_ms +
