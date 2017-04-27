@@ -419,7 +419,7 @@ our trace, the estimated RTT converges to the minimum RTT of 42ms.
 
 As shown in Table~\ref{tab:attempt_1}, we were unable to break above a power
 score of 20. Note that when \texttt{min\_window} was set to 0, we see
-dismal scores to do our algorithm getting in the undesirable state of sending
+dismal scores due to our algorithm getting in the undesirable state of sending
 only a single datagram at a time as described above. Furthermore, increasing
 this minimum to 2 datagrams resulted in similar behavior, where 1 datagram would be
 sent per $RTT/2$, and not provide an accurate feedback signal for our estimates.
