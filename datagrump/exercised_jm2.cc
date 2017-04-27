@@ -242,12 +242,12 @@ void ExDJM2Controller::ack_received( const uint64_t sequence_number_acked,
     if (rtt_change_percent < 3) {
         debug_printf(INFO, "RTT still stable, growing window size.");
         //cwnd_ += 1/rtt_min_initial_estimate();
-        cwnd_ += .3;
+        cwnd_ += .23;
     } else {
       // RTT change increased abruptly, pull back cwnd
       if (did_increase_cwnd_) {
         debug_printf(WARN, "RTT jumped too much, pulling back cwnd.");
-        cwnd_ /= 2;
+        cwnd_ *= 0.75;
       }
     }
       
