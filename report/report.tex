@@ -16,6 +16,7 @@
 \usepackage{enumerate}
 \usepackage{enumitem}
 \usepackage{booktabs}
+\usepackage[labelfont=bf, font=bf]{caption}
 \usepackage{mathtools}
 \usepackage{tikz}
 \usepackage{float}
@@ -348,7 +349,6 @@ weighted moving average to estimate the rate that the receiver was receiving
 datagrams. This served as a proxy of the bottleneck bandwidth
 capacity and varied over time. We then approximated the RTT to as the minimum
 RTT that was seen during the flow.
-
 Then, our algorithm tried to maintain the bandwidth delay product number of
 datagrams in flight at any given time as $RTT_{estimate} * BW_{estimate}$ using
 the estimates we calculated.
@@ -416,7 +416,7 @@ large queuing delays. We worked to address this in our following attempt.
 
 \subsection*{Rocinante: Delay-Based Additive Increase, Additive Decrease}
 
-After our first attempt, we decided build off of the delay-based algorithm from
+We decided build off of the delay-based algorithm from
 Exercise C. Specifically we built on the idea of using an additive-increase
 and additive decrease. However, unlike the previous attempt, which used a
 naive RTT threshold, we now use feedback from the acknowledged datagrams to set
@@ -549,7 +549,9 @@ approach allowed us to significantly reduce the 95-percentile signal delay
 while maintaining reasonable throughput than our other attempts, which lead
 to the best power scores.
 
-\begin{figure}
+\pagebreak
+
+\begin{figure}[t]
   \centering
   \includegraphics[height=8cm]{./img/final_trace.png}
   \caption{Rocinante on the Verizon trace}
