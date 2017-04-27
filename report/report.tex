@@ -553,8 +553,10 @@ to the best power scores.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[height=8cm]{./img/final_trace.png}
-  \caption{Rocinante on the Verizon trace}
+  \includegraphics[height=7cm, clip, trim={1cm 12cm 1cm 6cm}]{./img/final_trace.pdf}
+  \caption{Rocinante on the Verizon trace (alpha = 2, beta = 5,
+    rtt\_allowance = 1.4, ewma\_weight = 0.01, and timeout = 25)
+  }
   \label{fig:final_trace}
 \end{figure}
 
@@ -567,6 +569,20 @@ its congestion window and misses out on some of the available throughput.
 One approach that may have addressed this would be to implement a short probing
 state like that in BBR, where BBR can converge exponentially fast to a new
 bottleneck bandwidth.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[height=7cm, clip, trim={1cm 12cm 1cm 6cm}]{./img/a5b2.pdf}
+  \caption{Rocinante on the Verizon trace (alpha = 5, beta = 2,
+    rtt\_allowance = 1.4, ewma\_weight = 0.01, and timeout = 25)
+  }
+  \label{fig:a5b2}
+\end{figure}
+
+In contrast, Figure~\ref{fig:a5b2} shows the behavior of Rocinante when
+alpha = 5 and beta = 2. Notice that by just tweaking the algorithm such that
+additive increase occurs faster than additive decrease, the algorithm is much
+more aggressive, and quicker to full the available.
 
 \vfill
 \pagebreak
