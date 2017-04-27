@@ -466,7 +466,7 @@ to avoid getting stuck in an undesirable stable state. In our case, we saw
 that having two simple states (increasing or decreasing) was an intuitive way
 ensure that the algorithm was responsive. This was just a choice we made for
 simplicity, other algorithms like BBR use more complex states (e.g. ProbeBW) to
-ensure that the available throughput is utilized.
+ensure that the available throughput is rapidly utilized as it continously changes.
 
 With this general design of our algorithm in place, we moved on to testing the
 performance of our various parameters: (1) \texttt{alpha}, which defines the
