@@ -74,7 +74,7 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   // If the current RTT is outside of the "stable" range of the average,
   // addtively decrease cwnd by beta, and reset the average to be RT_prop.
   if (rtt_delay_ms > (rtt_allowance_ *  rtt_average_)) {
-    cwnd_ = max(cwnd_ - ((double) beta_ / cwnd_), 1.0); // min cwnd = 1
+    cwnd_ = max(cwnd_ - (beta_ / cwnd_), 1.0); // min cwnd = 1
     rtt_average_ = rtt_min_; // reset RTT
     if (true) {
       cerr << "      --- cwnd_:\t" << cwnd_
@@ -85,7 +85,7 @@ void ExDController::ack_received( const uint64_t sequence_number_acked,
   // If the current RTT is within a stable range, continue to additively
   // increase the window size by alpha.
   else {
-    cwnd_ += (double) alpha_ / cwnd_;
+    cwnd_ += alpha_ / cwnd_;
     if (true) {
       cerr << "+++       cwnd_:\t" << cwnd_
            << "\trtt_average_:\t" << rtt_average_
