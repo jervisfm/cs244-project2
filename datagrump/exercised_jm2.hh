@@ -11,12 +11,6 @@
 // Main idea is to try explore effect of just increasing Window whilst RRT is constant.
 class ExDJM2Controller : public Controller {
 private:
-    enum BBR_STATE {
-     STARTUP,
-     DRAIN,
-     PROBE_BW,
-     PROBE_RTT,
-    };
     // Number of packets outstanding in the network.
     int inflight_packets_;
     // Value to control cwnd directly in startup mode.
