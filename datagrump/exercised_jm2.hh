@@ -48,7 +48,10 @@ private:
 
   // Returns the maximum bandwidth over the past number of samples. Unit is bytes/msec
   double sliding_max_bandwidth(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES);
-
+  
+  // Returns the very first RTT estimate which should give for an estimate on propagation delay.
+  double rtt_min_intial_estimate();
+  
   // Returns the maximum bandwidth over the past number of samples. Unit is kbytes/sec
   inline double sliding_max_bandwidth_kBs(int num_samples=DEFAULT_WINDOW_NUM_SAMPLES) {
     double bw_bytes_per_msec = sliding_max_bandwidth(num_samples);

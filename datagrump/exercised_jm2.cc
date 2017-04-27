@@ -39,6 +39,15 @@ int ExDJM2Controller::bdp_packets() {
   return bdp_outstanding_packets;
 }
 
+double ExDJM2Controller::rtt_min_intial_estimate() {
+  if (rtt_samples_.empty()) {
+    // Use a sensible default guess.
+    40;
+  } else {
+    return rtt_samples_[0];
+  }
+}
+
 /* Get current window size, in datagrams */
 unsigned int ExDJM2Controller::window_size( void )
 {
